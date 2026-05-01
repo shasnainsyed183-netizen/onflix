@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONflix - Upload</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Segoe UI',Arial,sans-serif;background:#0a0a0f;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+        .box{background:#1a1a2e;padding:40px;border-radius:20px;max-width:600px;width:100%;border:2px solid #e50914}
+        h1{text-align:center;color:#e50914;margin-bottom:25px}
+        .fg{margin-bottom:18px}
+        label{display:block;margin-bottom:6px;font-weight:600;color:#aaa}
+        input,textarea,select{width:100%;padding:12px;border-radius:8px;border:1px solid #2a2a35;background:#0d0d15;color:#fff;font-size:15px}
+        textarea{height:80px;resize:vertical}
+        button{width:100%;padding:14px;background:#e50914;color:#fff;border:none;border-radius:8px;font-size:17px;font-weight:700;cursor:pointer}
+        button:hover{background:#ff0f1f}
+        .msg{text-align:center;padding:12px;border-radius:8px;margin-top:15px;display:none}
+        .s{background:#2ecc71}.e{background:#e74c3c}
+        .back{text-align:center;margin-top:15px}
+        .back a{color:#e50914;text-decoration:none}
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>🎬 Upload Movie</h1>
+        <form id="f" enctype="multipart/form-data">
+            <div class="fg"><label>Title *</label><input type="text" name="title" required></div>
+            <div class="fg"><label>Description</label><textarea name="description"></textarea></div>
+            <div class="fg"><label>Genre</label><select name="genre"><option>Action</option><option>Comedy</option><option>Drama</option><option>Horror</option><option>Sci-Fi</option><option>Other</option></select></div>
+            <div class="fg"><label>Year</label><input type="number" name="year" value="2024"></div>
+            <div class="fg"><label>Duration</label><input type="text" name="duration" placeholder="2h 15min"></div>
+            <div class="fg"><label>Director</label><input type="text" name="director"></div>
+            <div class="fg"><label>Cast</label><input type="text" name="cast"></div>
+            <div class="fg"><label>Movie File * (MP4)</label><input type="file" name="video" accept="video/*" required></div>
+            <div class="fg"><label>Poster Image</label><input type="file" name="poster" accept="image/*"></div>
+            <button type="submit">📤 Upload Movie</button>
+        </form>
+        <div class="msg" id="msg"></div>
+        <div class="back"><a href="/">← Back</a></div>
+    </div>
+    <script>
+        document.getElementById('f').addEventListener('submit',async(e)=>{
+            e.preventDefault();
+            const fd=new FormData(e.target);
+            const msg=document.getElementById('msg');
+            msg.style.display='none';
+            try{
+                const r=await fetch('/api/movies',{method:'POST',body:fd});
+                const d=await r.json();
+                if(d.success){msg.className='msg s';msg.textContent='✅ Done!';msg.style.display='block';e.target.reset();setTimeout(()=>location.href='/',2000)}
+                else throw new Error(d.error||'Failed')
+            }catch(err){msg.className='msg e';msg.textContent='❌ '+err.message;msg.style.display='block'}
+        });
+    </script>
+</body>
+</html>

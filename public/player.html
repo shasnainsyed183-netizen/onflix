@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONflix - Player</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Segoe UI',Arial,sans-serif;background:#000;color:#fff;min-height:100vh}
+        .container{max-width:1200px;margin:0 auto;padding:20px}
+        .back{color:#e50914;text-decoration:none;padding:10px 20px;display:inline-block;font-weight:600;margin-bottom:15px}
+        video{width:100%;max-height:70vh;background:#000;border-radius:10px}
+        .details{background:#1a1a2e;padding:25px;border-radius:10px;margin-top:20px}
+        .details h2{font-size:28px;margin-bottom:10px}
+        .meta{display:flex;gap:20px;flex-wrap:wrap;color:#aaa;margin-bottom:15px}
+        .desc{color:#ccc;line-height:1.8}
+    </style>
+</head>
+<body>
+    <div class="container" id="app"><div style="text-align:center;padding:100px"><p>Loading...</p></div></div>
+    <script>
+        const A=location.origin;
+        const id=location.pathname.split('/watch/')[1];
+        (async()=>{
+            try{
+                const r=await fetch(`${A}/api/movies/${id}`);
+                const m=await r.json();
+                if(m.error){app.innerHTML='<h2>Not found</h2><a href="/" class="back">← Back</a>';return}
+                document.title=m.title+' - ONflix';
+                app.innerHTML=`<a href="/" class="back">← Back</a><video controls autoplay><source src="${A}/api/stream/${m.id}" type="video/mp4"></video><div class="details"><h2>${m.title}</h2><div class="meta"><span>📅 ${m.year}</span><span>⏱ ${m.duration}</span><span>🎭 ${m.genre}</span><span>👁 ${m.views} views</span></div><p class="desc">${m.description}</p>${m.director?`<p><strong>Director:</strong> ${m.director}</p>`:''}${m.cast?`<p><strong>Cast:</strong> ${m.cast}</p>`:''}</div>`
+            }catch(e){app.innerHTML='<h2>Error</h2><a href="/" class="back">← Back</a>'}
+        })();
+    </script>
+</body>
+</html>
