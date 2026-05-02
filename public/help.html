@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ONflix - Help Center</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root{--bg:#000;--bg2:#111;--red:#e50914;--text:#fff;--text2:#b3b3b3;--border:#333}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+        .header{padding:25px 60px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+        .logo{font-size:2rem;font-weight:900;color:var(--red);text-decoration:none}
+        .back-btn{color:var(--text2);text-decoration:none;font-size:14px}
+        .back-btn:hover{color:var(--text)}
+        .container{max-width:900px;margin:0 auto;padding:40px 20px}
+        .breadcrumb{color:var(--text2);font-size:13px;margin-bottom:25px}
+        .breadcrumb a{color:var(--text2);text-decoration:none}.breadcrumb a:hover{color:var(--text)}
+        h1{font-size:2rem;margin-bottom:10px}
+        .subtitle{color:var(--text2);margin-bottom:30px}
+        .search-box{display:flex;margin-bottom:40px;max-width:500px}
+        .search-box input{flex:1;padding:14px;border-radius:5px 0 0 5px;border:1px solid var(--border);background:var(--bg2);color:#fff;font-size:15px;outline:none}
+        .search-box button{background:var(--red);color:#fff;padding:14px 20px;border:none;border-radius:0 5px 5px 0;cursor:pointer}
+        h2{font-size:1.3rem;margin:30px 0 15px}
+        .article-list{list-style:none}
+        .article-list li{border-bottom:1px solid var(--border)}
+        .article-list li a{display:block;padding:15px 0;color:var(--text);text-decoration:none;font-size:15px;transition:0.3s}
+        .article-list li a:hover{color:var(--red)}
+        .section{margin-bottom:40px}
+        .card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;margin-top:20px}
+        .help-card{background:var(--bg2);padding:25px;border-radius:10px;border:1px solid var(--border)}
+        .help-card i{font-size:30px;color:var(--red);margin-bottom:12px}
+        .help-card h3{font-size:16px;margin-bottom:8px}
+        .help-card p{color:var(--text2);font-size:13px;line-height:1.5}
+        .footer{text-align:center;padding:30px;color:var(--text2);font-size:12px;border-top:1px solid var(--border);margin-top:40px}
+        .footer a{color:var(--text2);text-decoration:none;margin:0 10px}.footer a:hover{color:var(--text)}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <a href="/" class="logo">ONflix</a>
+        <a href="/" class="back-btn"><i class="fas fa-arrow-left"></i> Back to Home</a>
+    </div>
+    <div class="container">
+        <div class="breadcrumb"><a href="/">Home</a> › Help Center</div>
+        <h1>Help Center</h1>
+        <p class="subtitle">Find answers to common questions and get support.</p>
+        <div class="search-box"><input type="text" placeholder="Search help articles..."><button><i class="fas fa-search"></i></button></div>
+        
+        <div class="section">
+            <h2>Popular Articles</h2>
+            <ul class="article-list">
+                <li><a href="#">How to sign in to ONflix</a></li>
+                <li><a href="#">Fix issues with sign-in or sign-up</a></li>
+                <li><a href="#">Can't sign in to ONflix</a></li>
+                <li><a href="#">How to sign out of a device</a></li>
+                <li><a href="#">How to change your password</a></li>
+                <li><a href="#">How to update your email address</a></li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>Browse by Topic</h2>
+            <div class="card-grid">
+                <div class="help-card"><i class="fas fa-sign-in-alt"></i><h3>Sign In & Account</h3><p>Password reset, email change, account settings</p></div>
+                <div class="help-card"><i class="fas fa-tv"></i><h3>Watching ONflix</h3><p>Playback issues, quality, subtitles</p></div>
+                <div class="help-card"><i class="fas fa-mobile-alt"></i><h3>Devices & Platforms</h3><p>TV, phone, tablet, computer setup</p></div>
+                <div class="help-card"><i class="fas fa-credit-card"></i><h3>Billing & Plans</h3><p>Free account, features, limitations</p></div>
+                <div class="help-card"><i class="fas fa-shield-alt"></i><h3>Privacy & Safety</h3><p>Data protection, security settings</p></div>
+                <div class="help-card"><i class="fas fa-question-circle"></i><h3>Troubleshooting</h3><p>Common problems and solutions</p></div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Need More Help?</h2>
+            <p style="color:var(--text2);margin-bottom:15px">If you can't find what you're looking for, contact our support team.</p>
+            <a href="/contact" class="btn" style="display:inline-block;padding:12px 25px;background:var(--red);color:#fff;text-decoration:none;border-radius:5px;font-weight:600">Contact Us</a>
+        </div>
+    </div>
+    <div class="footer">
+        <a href="#">Terms of Use</a> | <a href="#">Privacy</a> | <a href="/contact">Contact</a>
+        <p style="margin-top:10px">© 2025 ONflix</p>
+    </div>
+</body>
+</html>

@@ -113,7 +113,7 @@ async function requireAdmin(req, res, next) {
 
 // ==================== AUTH ROUTES ====================
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
+app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login-form' }), (req, res) => {
     const token = jwt.sign({ id: req.user.id, email: req.user.email, name: req.user.name }, JWT_SECRET, { expiresIn: '7d' });
     res.redirect(`/auth-success?token=${token}&name=${encodeURIComponent(req.user.name)}&email=${req.user.email}&avatar=${req.user.avatar||''}`);
 });
@@ -271,10 +271,16 @@ app.get('/admin', (req, res) => {
         <script>async function verify(){const p=document.getElementById('pw').value;try{const r=await fetch('/api/verify-device',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:p})});const d=await r.json();if(d.success){localStorage.setItem('admin_device_key',d.deviceKey);location.href='/admin?key='+d.deviceKey}else{document.getElementById('err').style.display='block'}}catch(e){}}</script></body></html>`);
 });
 
-app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
-app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
+// Public routes (no login required)
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
+app.get('/login-form', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login-form.html')));
 app.get('/signup', (req, res) => res.sendFile(path.join(__dirname, 'public', 'signup.html')));
-app.get('/profile', (req, res) => res.sendFile(path.join(__dirname, 'public', 'profile.html')));
-app.get('/watch/:id', (req, res) => res.sendFile(path.join(__dirname, 'public', 'player.html')));
+app.get('/help', (req, res) => res.sendFile(path.join(__dirname, 'public', 'help.html')));
+app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'public', 'contact.html')));
+
+// Protected routes (login required)
+app.get('/browse', authRequired, (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+app.get('/profile', authRequired, (req, res) => res.sendFile(path.join(__dirname, 'public', 'profile.html')));
+app.get('/watch/:id', authRequired, (req, res) => res.sendFile(path.join(__dirname, 'public', 'player.html')));
 
 app.listen(PORT, () => console.log(`\n🎬 ONflix PRO: http://localhost:${PORT}\n👥 Users: ${getUsers().length}\n🎬 Movies: ${getMovies().length}\n`));
