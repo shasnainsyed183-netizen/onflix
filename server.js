@@ -13,13 +13,13 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const uuidv4 = () => crypto.randomUUID();
 const app = express();
 const PORT = process.env.PORT || 5000;
-const JWT_SECRET = 'onflix_super_secret_key_2025';
+const JWT_SECRET = process.env.JWT_SECRET || 'onflix_super_secret_key_2025';
 
-// ==================== GOOGLE CREDENTIALS ====================
-const GOOGLE_CLIENT_ID = '266517041431-f14lggun9tnuq9bogf1mfbaqrrktuarv.apps.googleusercontent.com';
-const GOOGLE_CLIENT_SECRET = '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';
+// ==================== GOOGLE CREDENTIALS (FROM ENV) ====================
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
 const CALLBACK_URL = process.env.CALLBACK_URL || 'https://onflix-production.up.railway.app';
-// ===========================================================
+// =====================================================================
 
 app.use(cors());
 app.use(express.json());
