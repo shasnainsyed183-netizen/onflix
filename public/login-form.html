@@ -8,55 +8,50 @@
     <style>
         :root{--bg:#000;--bg2:#111;--red:#e50914;--text:#fff;--text2:#b3b3b3;--border:#333}
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-        .header{padding:25px 60px;display:flex;align-items:center}
-        .logo{font-size:2.5rem;font-weight:900;color:var(--red);text-decoration:none;letter-spacing:-1px}
-        .login-container{max-width:450px;margin:0 auto;padding:20px}
-        .login-box{background:rgba(0,0,0,0.85);padding:50px 40px;border-radius:10px;border:1px solid var(--border)}
-        h1{font-size:1.8rem;margin-bottom:20px}
-        .subtitle{color:var(--text2);font-size:14px;margin-bottom:25px}
-        input{width:100%;padding:16px;border-radius:5px;border:1px solid var(--border);background:rgba(0,0,0,0.5);color:#fff;font-size:16px;outline:none;margin-bottom:15px}
-        input:focus{border-color:var(--red)}
-        .btn{width:100%;padding:14px;background:var(--red);color:#fff;border:none;border-radius:5px;font-size:17px;font-weight:700;cursor:pointer;transition:0.3s}
-        .btn:hover{background:#ff0f1f}
-        .btn-google{background:#4285f4;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none}
-        .btn-google:hover{background:#3367d6}
+        body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center}
+        .box{background:rgba(0,0,0,0.85);padding:50px 40px;border-radius:10px;max-width:420px;width:90%;border:1px solid var(--border)}
+        .logo{font-size:2rem;font-weight:900;color:var(--red);text-align:center;margin-bottom:25px}
+        h1{font-size:1.6rem;text-align:center;margin-bottom:20px}
+        .social-btn{width:100%;padding:14px;border-radius:5px;font-size:15px;font-weight:600;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;color:#fff;margin-bottom:10px;transition:0.3s}
+        .btn-google{background:#4285f4}.btn-google:hover{background:#3367d6}
+        .btn-twitter{background:#1da1f2}.btn-twitter:hover{background:#0d8bd9}
+        .btn-github{background:#333}.btn-github:hover{background:#555}
         .or-divider{text-align:center;color:var(--text2);margin:20px 0;position:relative;font-size:13px}
         .or-divider::before,.or-divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--border)}
         .or-divider::before{left:0}.or-divider::after{right:0}
+        input{width:100%;padding:14px;border-radius:5px;border:1px solid var(--border);background:rgba(0,0,0,0.5);color:#fff;font-size:15px;outline:none;margin-bottom:12px}
+        input:focus{border-color:var(--red)}
+        .btn{width:100%;padding:14px;background:var(--red);color:#fff;border:none;border-radius:5px;font-size:16px;font-weight:700;cursor:pointer}
+        .btn:hover{background:#ff0f1f}
         .msg{padding:12px;border-radius:5px;margin-bottom:15px;display:none;text-align:center;font-weight:600}
         .msg.e{background:#e74c3c}.msg.s{background:#2ecc71}
-        .help-link{color:var(--text2);text-decoration:none;font-size:13px;display:block;margin-top:15px;text-align:center}
-        .help-link:hover{color:var(--text)}
-        .signup-link{color:var(--text2);font-size:14px;margin-top:20px;text-align:center}
-        .signup-link a{color:var(--text);text-decoration:none;font-weight:600}
-        .signup-link a:hover{color:var(--red)}
-        .captcha-text{color:var(--text2);font-size:11px;margin-top:20px;text-align:center;line-height:1.5}
+        .link{text-align:center;margin-top:20px;color:var(--text2);font-size:14px}
+        .link a{color:var(--text);text-decoration:none;font-weight:600}
+        .link a:hover{color:var(--red)}
+        .help{text-align:center;margin-top:10px}
+        .help a{color:var(--text2);text-decoration:none;font-size:13px}
+        .help a:hover{color:var(--text)}
     </style>
 </head>
 <body>
-    <div class="header">
-        <a href="/" class="logo">ONflix</a>
-    </div>
-    <div class="login-container">
-        <div class="login-box">
-            <h1>Sign In</h1>
-            <p class="subtitle">Enter your info to sign in. Or get started with a new account.</p>
-            
-            <a href="/auth/google" class="btn btn-google"><i class="fab fa-google"></i> Sign in with Google</a>
-            <div class="or-divider">OR</div>
-            
-            <div class="msg" id="msg"></div>
-            <form id="loginForm">
-                <input type="email" name="email" placeholder="Email or mobile number" required>
-                <input type="password" name="password" placeholder="Password" required>
-                <button type="submit" class="btn">Sign In</button>
-            </form>
-            
-            <a href="/help" class="help-link">Get Help</a>
-            <div class="signup-link">New to ONflix? <a href="/signup">Sign up now</a></div>
-            <p class="captcha-text">This page is protected by Google reCAPTCHA to ensure you're not a bot.</p>
-        </div>
+    <div class="box">
+        <div class="logo">ONflix</div>
+        <h1>Sign In</h1>
+        
+        <a href="/auth/google" class="social-btn btn-google"><i class="fab fa-google"></i> Continue with Google</a>
+        <a href="#" class="social-btn btn-twitter"><i class="fab fa-twitter"></i> Continue with Twitter</a>
+        <a href="#" class="social-btn btn-github"><i class="fab fa-github"></i> Continue with GitHub</a>
+        
+        <div class="or-divider">OR</div>
+        
+        <div class="msg" id="msg"></div>
+        <form id="loginForm">
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit" class="btn">Sign In</button>
+        </form>
+        <div class="link">New to ONflix? <a href="/signup">Sign up now</a></div>
+        <div class="help"><a href="/help">Get Help</a></div>
     </div>
     <script>
         document.getElementById('loginForm').addEventListener('submit',async function(e){
@@ -64,21 +59,12 @@
             const fd=new FormData(this);
             const data={email:fd.get('email'),password:fd.get('password')};
             const msg=document.getElementById('msg');
-            msg.style.display='none';
             try{
                 const r=await fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
                 const d=await r.json();
-                if(d.success){
-                    localStorage.setItem('onflix_token',d.token);
-                    localStorage.setItem('onflix_user',JSON.stringify(d.user));
-                    msg.className='msg s';msg.textContent='✅ Login successful! Redirecting...';msg.style.display='block';
-                    setTimeout(()=>window.location.href='/browse',1000);
-                }else{
-                    msg.className='msg e';msg.textContent='❌ '+d.error;msg.style.display='block';
-                }
-            }catch(e){
-                msg.className='msg e';msg.textContent='❌ Connection error!';msg.style.display='block';
-            }
+                if(d.success){localStorage.setItem('onflix_token',d.token);localStorage.setItem('onflix_user',JSON.stringify(d.user));msg.className='msg s';msg.textContent='✅ Login successful!';msg.style.display='block';setTimeout(()=>window.location.href='/browse',1000)}
+                else{msg.className='msg e';msg.textContent='❌ '+d.error;msg.style.display='block'}
+            }catch(e){msg.className='msg e';msg.textContent='❌ Connection error!';msg.style.display='block'}
         });
     </script>
 </body>

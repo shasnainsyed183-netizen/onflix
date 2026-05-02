@@ -3,64 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONflix - Sign Up</title>
+    <title>ONflix - Create Account</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root{--bg:#000;--bg2:#111;--red:#e50914;--text:#fff;--text2:#b3b3b3;--border:#333}
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-        .header{padding:25px 60px;display:flex;align-items:center}
-        .logo{font-size:2.5rem;font-weight:900;color:var(--red);text-decoration:none;letter-spacing:-1px}
-        .signup-container{max-width:450px;margin:0 auto;padding:20px}
-        .signup-box{background:rgba(0,0,0,0.85);padding:50px 40px;border-radius:10px;border:1px solid var(--border)}
-        h1{font-size:1.8rem;margin-bottom:10px}
-        .subtitle{color:var(--text2);font-size:14px;margin-bottom:25px}
-        input{width:100%;padding:16px;border-radius:5px;border:1px solid var(--border);background:rgba(0,0,0,0.5);color:#fff;font-size:16px;outline:none;margin-bottom:15px}
+        body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center}
+        .box{background:rgba(0,0,0,0.85);padding:50px 40px;border-radius:10px;max-width:420px;width:90%;border:1px solid var(--border);text-align:center}
+        .logo{font-size:2rem;font-weight:900;color:var(--red);margin-bottom:20px}
+        h1{font-size:1.6rem;margin-bottom:15px}
+        p{color:var(--text2);font-size:14px;margin-bottom:20px}
+        input{width:100%;padding:14px;border-radius:5px;border:1px solid var(--border);background:rgba(0,0,0,0.5);color:#fff;font-size:15px;outline:none;margin-bottom:12px}
         input:focus{border-color:var(--red)}
-        .btn{width:100%;padding:14px;background:var(--red);color:#fff;border:none;border-radius:5px;font-size:17px;font-weight:700;cursor:pointer;transition:0.3s}
+        .btn{width:100%;padding:14px;background:var(--red);color:#fff;border:none;border-radius:5px;font-size:16px;font-weight:700;cursor:pointer}
         .btn:hover{background:#ff0f1f}
-        .btn-google{background:#4285f4;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:10px;text-decoration:none}
-        .btn-google:hover{background:#3367d6}
-        .or-divider{text-align:center;color:var(--text2);margin:20px 0;position:relative;font-size:13px}
-        .or-divider::before,.or-divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--border)}
-        .or-divider::before{left:0}.or-divider::after{right:0}
-        .msg{padding:12px;border-radius:5px;margin-bottom:15px;display:none;text-align:center;font-weight:600}
+        .msg{padding:12px;border-radius:5px;margin-bottom:15px;display:none;font-weight:600}
         .msg.e{background:#e74c3c}.msg.s{background:#2ecc71}
-        .step-indicator{display:flex;gap:5px;margin-bottom:20px}
-        .step{flex:1;height:3px;background:var(--border);border-radius:3px}
-        .step.active{background:var(--red)}
-        .signin-link{color:var(--text2);font-size:14px;margin-top:20px;text-align:center}
-        .signin-link a{color:var(--text);text-decoration:none;font-weight:600}
-        .signin-link a:hover{color:var(--red)}
-        .captcha-text{color:var(--text2);font-size:11px;margin-top:20px;text-align:center;line-height:1.5}
-        .hint{font-size:11px;color:var(--text2);margin-top:-10px;margin-bottom:12px}
+        .link{margin-top:20px;color:var(--text2);font-size:14px}
+        .link a{color:var(--text);text-decoration:none;font-weight:600}
+        .link a:hover{color:var(--red)}
+        .hint{font-size:11px;color:var(--text2);margin-top:-8px;margin-bottom:12px}
     </style>
 </head>
 <body>
-    <div class="header">
-        <a href="/" class="logo">ONflix</a>
-    </div>
-    <div class="signup-container">
-        <div class="signup-box">
-            <div class="step-indicator"><div class="step active"></div><div class="step"></div><div class="step"></div></div>
-            <h1>Create Account</h1>
-            <p class="subtitle">Enter your info to create a new account. Or use Google for faster signup.</p>
-            
-            <a href="/auth/google" class="btn btn-google"><i class="fab fa-google"></i> Sign up with Google</a>
-            <div class="or-divider">OR</div>
-            
-            <div class="msg" id="msg"></div>
-            <form id="signupForm">
-                <input type="text" name="name" placeholder="Full Name" required>
-                <input type="email" name="email" placeholder="Email address" required>
-                <input type="password" name="password" placeholder="Create password" minlength="6" required>
-                <p class="hint">🔒 Password must be at least 6 characters</p>
-                <button type="submit" class="btn">Create Account</button>
-            </form>
-            
-            <div class="signin-link">Already have an account? <a href="/login-form">Sign in</a></div>
-            <p class="captcha-text">This page is protected by Google reCAPTCHA to ensure you're not a bot.</p>
-        </div>
+    <div class="box">
+        <div class="logo">ONflix</div>
+        <h1>Create Account</h1>
+        <p>Enter your details to start watching.</p>
+        <div class="msg" id="msg"></div>
+        <form id="signupForm">
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email address" required>
+            <input type="password" name="password" placeholder="Create password" minlength="6" required>
+            <p class="hint">🔒 Password must be at least 6 characters</p>
+            <button type="submit" class="btn">Create Account</button>
+        </form>
+        <div class="link">Already have an account? <a href="/login-form">Sign in</a></div>
     </div>
     <script>
         document.getElementById('signupForm').addEventListener('submit',async function(e){
@@ -68,22 +46,13 @@
             const fd=new FormData(this);
             const data={name:fd.get('name'),email:fd.get('email'),password:fd.get('password')};
             const msg=document.getElementById('msg');
-            msg.style.display='none';
             if(data.password.length<6){msg.className='msg e';msg.textContent='❌ Password must be at least 6 characters';msg.style.display='block';return}
             try{
                 const r=await fetch('/api/signup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
                 const d=await r.json();
-                if(d.success){
-                    localStorage.setItem('onflix_token',d.token);
-                    localStorage.setItem('onflix_user',JSON.stringify(d.user));
-                    msg.className='msg s';msg.textContent='✅ Account created! Check your email...';msg.style.display='block';
-                    setTimeout(()=>window.location.href='/browse',1500);
-                }else{
-                    msg.className='msg e';msg.textContent='❌ '+d.error;msg.style.display='block';
-                }
-            }catch(e){
-                msg.className='msg e';msg.textContent='❌ Connection error!';msg.style.display='block';
-            }
+                if(d.success){localStorage.setItem('onflix_token',d.token);localStorage.setItem('onflix_user',JSON.stringify(d.user));msg.className='msg s';msg.textContent='✅ Account created! Redirecting...';msg.style.display='block';setTimeout(()=>window.location.href='/browse',1500)}
+                else{msg.className='msg e';msg.textContent='❌ '+d.error;msg.style.display='block'}
+            }catch(e){msg.className='msg e';msg.textContent='❌ Connection error!';msg.style.display='block'}
         });
     </script>
 </body>
