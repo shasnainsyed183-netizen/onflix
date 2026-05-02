@@ -6,7 +6,7 @@ const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -23,22 +23,29 @@ if (!fs.existsSync(DB)) fs.writeFileSync(DB, '[]');
 const getMovies = () => JSON.parse(fs.readFileSync(DB));
 const saveMovies = (m) => fs.writeFileSync(DB, JSON.stringify(m, null, 2));
 
-// ==================== PASSWORD PROTECTION ====================
-const ADMIN_PASSWORD = 'Shash@123'; // 🔑 Apna password yahan change kar sakte ho
+// ==================== SECURITY ====================
+const ADMIN_PASSWORD = 'Shash@123';
+const ADMIN_DEVICE_KEY = 'onflix_admin_device_verified';
 
-function checkAuth(req, res, next) {
-    // Admin page aur POST/DELETE requests ke liye password check
-    if (req.path === '/admin' || (req.path.startsWith('/api/movies') && req.method !== 'GET')) {
-        const auth = req.headers['x-admin-password'] || req.query.password;
-        if (auth !== ADMIN_PASSWORD) {
-            return res.status(401).json({ error: 'Unauthorized! Admin password required.' });
-        }
+function requireAdmin(req, res, next) {
+    const password = req.headers['x-admin-password'] || req.query.password;
+    const deviceKey = req.headers['x-device-key'];
+    
+    if (password === ADMIN_PASSWORD || deviceKey === ADMIN_DEVICE_KEY) {
+        return next();
     }
-    next();
+    return res.status(401).json({ error: 'Unauthorized' });
 }
 
-app.use(checkAuth);
-// =============================================================
+app.post('/api/verify-device', (req, res) => {
+    const { password } = req.body;
+    if (password === ADMIN_PASSWORD) {
+        res.json({ success: true, deviceKey: ADMIN_DEVICE_KEY });
+    } else {
+        res.status(401).json({ error: 'Wrong password' });
+    }
+});
+// =================================================
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -48,8 +55,9 @@ const storage = multer.diskStorage({
     filename: (req, file, cb) => cb(null, uuidv4() + path.extname(file.originalname))
 });
 
-const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 * 1024 } });
+const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 * 1024 } });
 
+// Public routes
 app.get('/api/movies', (req, res) => res.json(getMovies().reverse()));
 
 app.get('/api/movies/:id', (req, res) => {
@@ -61,19 +69,33 @@ app.get('/api/movies/:id', (req, res) => {
     res.json(movie);
 });
 
-app.post('/api/movies', upload.fields([{ name: 'video' }, { name: 'poster' }]), (req, res) => {
-    if (!req.files || !req.files.video) return res.status(400).json({ error: 'Video required' });
+app.get('/api/search', (req, res) => {
+    const q = (req.query.q || '').toLowerCase().trim();
+    if (!q) return res.json(getMovies().reverse());
+    const movies = getMovies().filter(m => 
+        m.title.toLowerCase().includes(q) ||
+        m.genre.toLowerCase().includes(q) ||
+        (m.description && m.description.toLowerCase().includes(q)) ||
+        (m.director && m.director.toLowerCase().includes(q)) ||
+        (m.cast && m.cast.toLowerCase().includes(q))
+    );
+    res.json(movies);
+});
+
+// Admin routes (protected)
+app.post('/api/movies', requireAdmin, upload.fields([{ name: 'video' }, { name: 'poster' }]), (req, res) => {
+    if (!req.files || !req.files.video) return res.status(400).json({ error: 'Video file required' });
     const { title, description, genre, year, duration, director, cast } = req.body;
     const movies = getMovies();
     const movie = {
         id: uuidv4(),
         title: title || 'Untitled',
-        description: description || '',
+        description: description || 'No description',
         genre: genre || 'Other',
-        year: year || '2024',
+        year: year || new Date().getFullYear(),
         duration: duration || 'Unknown',
-        director: director || '',
-        cast: cast || '',
+        director: director || 'Unknown',
+        cast: cast || 'Unknown',
         videoUrl: '/uploads/' + req.files.video[0].filename,
         posterUrl: req.files.poster ? '/posters/' + req.files.poster[0].filename : null,
         filename: req.files.video[0].originalname,
@@ -82,10 +104,10 @@ app.post('/api/movies', upload.fields([{ name: 'video' }, { name: 'poster' }]), 
     };
     movies.push(movie);
     saveMovies(movies);
-    res.json({ success: true, message: 'Uploaded!', movie });
+    res.json({ success: true, message: 'Movie uploaded successfully! 🎉', movie });
 });
 
-app.delete('/api/movies/:id', (req, res) => {
+app.delete('/api/movies/:id', requireAdmin, (req, res) => {
     const movies = getMovies();
     const i = movies.findIndex(m => m.id === req.params.id);
     if (i === -1) return res.status(404).json({ error: 'Not found' });
@@ -94,12 +116,7 @@ app.delete('/api/movies/:id', (req, res) => {
     try { if (m.posterUrl) fs.unlinkSync(path.join(__dirname, m.posterUrl)); } catch(e) {}
     movies.splice(i, 1);
     saveMovies(movies);
-    res.json({ success: true });
-});
-
-app.get('/api/search', (req, res) => {
-    const q = (req.query.q || '').toLowerCase();
-    res.json(getMovies().filter(m => m.title.toLowerCase().includes(q) || m.genre.toLowerCase().includes(q)));
+    res.json({ success: true, message: 'Movie deleted!' });
 });
 
 app.get('/api/stream/:id', (req, res) => {
@@ -130,7 +147,7 @@ app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public', 'adm
 app.get('/watch/:id', (req, res) => res.sendFile(path.join(__dirname, 'public', 'player.html')));
 
 app.listen(PORT, () => {
-    console.log(`\n🎬 ONflix: http://localhost:${PORT}`);
-    console.log(`📤 Upload: http://localhost:${PORT}/admin`);
-    console.log(`🔑 Admin Password: ${ADMIN_PASSWORD}\n`);
+    console.log(`\n🎬 ONflix 2.0 Ready!`);
+    console.log(`🌐 http://localhost:${PORT}`);
+    console.log(`🔑 Admin: Shash@123\n`);
 });

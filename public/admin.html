@@ -3,118 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONflix - Upload</title>
+    <title>ONflix - Admin Upload</title>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Segoe UI',Arial,sans-serif;background:#0a0a0f;color:#fff;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
-        .box{background:#1a1a2e;padding:40px;border-radius:20px;max-width:600px;width:100%;border:2px solid #e50914}
-        h1{text-align:center;color:#e50914;margin-bottom:25px}
-        .fg{margin-bottom:18px}
-        label{display:block;margin-bottom:6px;font-weight:600;color:#aaa}
-        input,textarea,select{width:100%;padding:12px;border-radius:8px;border:1px solid #2a2a35;background:#0d0d15;color:#fff;font-size:15px}
+        .box{background:#1a1a2e;padding:35px;border-radius:20px;max-width:600px;width:100%;border:2px solid #e50914;box-shadow:0 20px 60px rgba(0,0,0,0.5)}
+        h1{text-align:center;color:#e50914;margin-bottom:25px;font-size:28px}
+        .fg{margin-bottom:16px}
+        label{display:block;margin-bottom:6px;font-weight:600;color:#aaa;font-size:13px}
+        input,textarea,select{width:100%;padding:13px;border-radius:10px;border:1px solid #2a2a35;background:#0d0d15;color:#fff;font-size:15px;transition:0.3s}
+        input:focus,textarea:focus,select:focus{border-color:#e50914;outline:none}
         textarea{height:80px;resize:vertical}
-        button{width:100%;padding:14px;background:#e50914;color:#fff;border:none;border-radius:8px;font-size:17px;font-weight:700;cursor:pointer}
-        button:hover{background:#ff0f1f}
-        .msg{text-align:center;padding:12px;border-radius:8px;margin-top:15px;display:none}
-        .s{background:#2ecc71}.e{background:#e74c3c}
+        button{width:100%;padding:15px;background:#e50914;color:#fff;border:none;border-radius:10px;font-size:17px;font-weight:700;cursor:pointer;transition:0.3s;margin-top:10px}
+        button:hover{background:#ff0f1f;transform:scale(1.02)}
+        .msg{text-align:center;padding:14px;border-radius:10px;margin-top:15px;display:none;font-weight:600}
+        .s{background:#2ecc71;color:#fff}.e{background:#e74c3c;color:#fff}
         .back{text-align:center;margin-top:15px}
-        .back a{color:#e50914;text-decoration:none}
-        /* Password Screen */
-        .password-screen{text-align:center;padding:40px}
-        .password-screen input{padding:14px;font-size:18px;border-radius:8px;border:1px solid #e50914;background:#0d0d15;color:#fff;text-align:center;margin:15px 0;width:100%}
-        .password-screen button{background:#e50914;color:#fff;padding:14px 30px;border:none;border-radius:8px;font-size:18px;font-weight:700;cursor:pointer}
+        .back a{color:#e50914;text-decoration:none;font-weight:600}
+        .logout-btn{background:#333;color:#fff;padding:8px 16px;border-radius:20px;border:none;cursor:pointer;font-size:12px;float:right;margin-top:-10px}
+        .logout-btn:hover{background:#555}
     </style>
 </head>
 <body>
-
-    <!-- Password Screen -->
-    <div class="box" id="passwordScreen">
-        <div class="password-screen">
-            <h1>🔐 Admin Login</h1>
-            <p style="color:#aaa;margin-bottom:15px;">Enter password to access upload page</p>
-            <input type="password" id="passwordInput" placeholder="Enter password...">
-            <br>
-            <button onclick="checkPassword()">🔓 Unlock</button>
-            <p id="passwordError" style="color:#e74c3c;margin-top:10px;display:none;">❌ Wrong password!</p>
-            <div class="back" style="margin-top:20px;"><a href="/">← Back to Home</a></div>
-        </div>
-    </div>
-
-    <!-- Upload Form (Hidden by default) -->
-    <div class="box" id="uploadScreen" style="display:none;">
+    <div class="box" id="uploadForm">
+        <button class="logout-btn" onclick="logout()">🔒 Logout</button>
         <h1>🎬 Upload Movie</h1>
         <form id="f" enctype="multipart/form-data">
-            <div class="fg"><label>Title *</label><input type="text" name="title" required></div>
-            <div class="fg"><label>Description</label><textarea name="description"></textarea></div>
-            <div class="fg"><label>Genre</label><select name="genre"><option>Action</option><option>Comedy</option><option>Drama</option><option>Horror</option><option>Sci-Fi</option><option>Other</option></select></div>
-            <div class="fg"><label>Year</label><input type="number" name="year" value="2024"></div>
-            <div class="fg"><label>Duration</label><input type="text" name="duration" placeholder="2h 15min"></div>
-            <div class="fg"><label>Director</label><input type="text" name="director"></div>
-            <div class="fg"><label>Cast</label><input type="text" name="cast"></div>
-            <div class="fg"><label>Movie File * (MP4)</label><input type="file" name="video" accept="video/*" required></div>
-            <div class="fg"><label>Poster Image</label><input type="file" name="poster" accept="image/*"></div>
-            <button type="submit">📤 Upload Movie</button>
+            <div class="fg"><label>📌 Title *</label><input type="text" name="title" required placeholder="Movie name..."></div>
+            <div class="fg"><label>📝 Description</label><textarea name="description" placeholder="About the movie..."></textarea></div>
+            <div class="fg"><label>🎭 Genre</label><select name="genre"><option>Action</option><option>Comedy</option><option>Drama</option><option>Horror</option><option>Romance</option><option>Thriller</option><option>Sci-Fi</option><option>Pakistani Drama</option><option>Turkish Drama</option><option>Hollywood</option><option>Bollywood</option><option>Other</option></select></div>
+            <div class="fg"><label>📅 Year</label><input type="number" name="year" value="2025"></div>
+            <div class="fg"><label>⏱️ Duration</label><input type="text" name="duration" placeholder="2h 15min"></div>
+            <div class="fg"><label>🎬 Director</label><input type="text" name="director" placeholder="Director name"></div>
+            <div class="fg"><label>👥 Cast</label><input type="text" name="cast" placeholder="Actor 1, Actor 2, Actor 3"></div>
+            <div class="fg"><label>🎥 Movie File * (MP4/MKV)</label><input type="file" name="video" accept="video/*" required></div>
+            <div class="fg"><label>🖼️ Poster Image (Optional)</label><input type="file" name="poster" accept="image/*"></div>
+            <button type="submit"><i class="fas fa-cloud-upload-alt"></i> Upload Movie</button>
         </form>
         <div class="msg" id="msg"></div>
-        <div class="back"><a href="/">← Back</a></div>
+        <div class="back"><a href="/">← Back to Home</a></div>
     </div>
 
     <script>
-        // 🔑 Admin Password (same as server.js)
-        const ADMIN_PASSWORD = 'Shash@123';
+        const API = location.origin;
+        const password = localStorage.getItem('admin_password') || '';
 
-        // Check password
-        function checkPassword() {
-            const input = document.getElementById('passwordInput').value;
-            const error = document.getElementById('passwordError');
-            
-            if (input === ADMIN_PASSWORD) {
-                // Password sahi hai - upload form dikhao
-                document.getElementById('passwordScreen').style.display = 'none';
-                document.getElementById('uploadScreen').style.display = 'block';
-                // Password store karo for API calls
-                localStorage.setItem('admin_password', input);
-            } else {
-                error.style.display = 'block';
-            }
+        function logout() {
+            localStorage.removeItem('onflix_admin_verified');
+            localStorage.removeItem('admin_password');
+            alert('✅ Logged out! Upload features disabled.');
+            window.location.href = '/';
         }
 
-        // Enter key se bhi check karo
-        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') checkPassword();
-        });
-
-        // Agar pehle se login hai to seedha form dikhao
-        if (localStorage.getItem('admin_password') === ADMIN_PASSWORD) {
-            document.getElementById('passwordScreen').style.display = 'none';
-            document.getElementById('uploadScreen').style.display = 'block';
-        }
-
-        // Upload form with password in header
         document.getElementById('f').addEventListener('submit', async(e) => {
             e.preventDefault();
             const fd = new FormData(e.target);
             const msg = document.getElementById('msg');
             msg.style.display = 'none';
-            
+
             try {
-                const password = localStorage.getItem('admin_password') || ADMIN_PASSWORD;
-                const r = await fetch('/api/movies', {
+                const res = await fetch(`${API}/api/movies`, {
                     method: 'POST',
                     body: fd,
                     headers: {
-                        'x-admin-password': password
+                        'x-device-key': 'onflix_admin_device_verified'
                     }
                 });
-                const d = await r.json();
-                if (d.success) {
+                const data = await res.json();
+                if (data.success) {
                     msg.className = 'msg s';
-                    msg.textContent = '✅ Done!';
+                    msg.textContent = '✅ Movie uploaded successfully! Redirecting...';
                     msg.style.display = 'block';
                     e.target.reset();
-                    setTimeout(() => location.href = '/', 2000);
+                    setTimeout(() => window.location.href = '/', 2000);
                 } else {
-                    throw new Error(d.error || 'Failed');
+                    throw new Error(data.error || 'Upload failed');
                 }
             } catch(err) {
                 msg.className = 'msg e';
