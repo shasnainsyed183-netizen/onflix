@@ -85,9 +85,14 @@ app.get('/api/search', (req, res) => {
 
 // Admin routes (protected)
 app.post('/api/movies', requireAdmin, upload.fields([{ name: 'video' }, { name: 'poster' }]), (req, res) => {
-    if (!req.files || !req.files.video) return res.status(400).json({ error: 'Video file required' });
-    const { title, description, genre, year, duration, director, cast } = req.body;
+    // ✅ Ab file bhi ho sakti hai ya YouTube link bhi
+    if ((!req.files || !req.files.video) && !req.body.youtubeLink) {
+        return res.status(400).json({ error: 'Video file ya YouTube link dono mein se ek zaroori hai' });
+    }
+    
+    const { title, description, genre, year, duration, director, cast, youtubeLink } = req.body;
     const movies = getMovies();
+    
     const movie = {
         id: uuidv4(),
         title: title || 'Untitled',
@@ -97,12 +102,14 @@ app.post('/api/movies', requireAdmin, upload.fields([{ name: 'video' }, { name: 
         duration: duration || 'Unknown',
         director: director || 'Unknown',
         cast: cast || 'Unknown',
-        videoUrl: '/uploads/' + req.files.video[0].filename,
-        posterUrl: req.files.poster ? '/posters/' + req.files.poster[0].filename : null,
-        filename: req.files.video[0].originalname,
+        videoUrl: req.files && req.files.video ? '/uploads/' + req.files.video[0].filename : null,
+        posterUrl: req.files && req.files.poster ? '/posters/' + req.files.poster[0].filename : null,
+        filename: req.files && req.files.video ? req.files.video[0].originalname : null,
+        youtubeLink: youtubeLink || null,  // ✅ YouTube link save hoga
         views: 0,
         uploadDate: new Date().toISOString()
     };
+    
     movies.push(movie);
     saveMovies(movies);
     res.json({ success: true, message: 'Movie uploaded successfully! 🎉', movie });
@@ -123,6 +130,12 @@ app.delete('/api/movies/:id', requireAdmin, (req, res) => {
 app.get('/api/stream/:id', (req, res) => {
     const movie = getMovies().find(m => m.id === req.params.id);
     if (!movie) return res.status(404).end();
+    
+    // ✅ Agar YouTube link hai to redirect
+    if (movie.youtubeLink) {
+        return res.redirect(movie.youtubeLink);
+    }
+    
     const vp = path.join(__dirname, movie.videoUrl);
     if (!fs.existsSync(vp)) return res.status(404).end();
     const stat = fs.statSync(vp);

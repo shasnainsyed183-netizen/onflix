@@ -4,235 +4,274 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="google-site-verification" content="R-idmykRomJXEJS349CsX5q5nr-xPvKCJN91nqb5z7E" />
-    <title>ONflix - Watch Free Movies Online</title>
+    <title>ONflix - Unlimited Movies & Dramas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root{--bg:#0a0a0f;--bg2:#1a1a2e;--red:#e50914;--gold:#f5c518;--text:#fff;--text2:#aaa}
+        :root{--bg:#000000;--bg2:#111111;--bg3:#1a1a1a;--red:#e50914;--gold:#f5c518;--text:#fff;--text2:#b3b3b3;--border:#333}
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-        .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:15px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,15,0.97);backdrop-filter:blur(20px);box-shadow:0 2px 20px rgba(0,0,0,0.5)}
-        .logo{font-size:2rem;font-weight:900;color:var(--red);text-decoration:none;letter-spacing:-1px}
-        .logo span{color:var(--text);font-weight:300}
+        body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+        
+        /* NAVBAR */
+        .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 60px;display:flex;align-items:center;justify-content:space-between;transition:0.4s;background:transparent}
+        .navbar.scrolled{background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);padding:12px 60px}
+        .nav-left{display:flex;align-items:center;gap:40px}
+        .logo{font-size:2rem;font-weight:900;color:var(--red);text-decoration:none;letter-spacing:-1px;text-transform:uppercase}
+        .nav-links{display:flex;gap:20px;list-style:none}
+        .nav-links a{color:var(--text2);text-decoration:none;font-size:14px;font-weight:500;transition:0.3s}
+        .nav-links a:hover,.nav-links a.active{color:var(--text)}
+        .nav-right{display:flex;align-items:center;gap:20px}
         .search-box{display:flex;align-items:center;background:rgba(255,255,255,0.1);border-radius:30px;padding:6px 6px 6px 18px;border:1px solid rgba(255,255,255,0.2);transition:0.3s}
-        .search-box:focus-within{border-color:var(--red);box-shadow:0 0 15px rgba(229,9,20,0.3)}
-        .search-box input{background:none;border:none;color:#fff;padding:10px;outline:none;width:220px;font-size:14px}
+        .search-box:focus-within{border-color:var(--red)}
+        .search-box input{background:none;border:none;color:#fff;padding:10px;outline:none;width:200px;font-size:14px}
+        .search-box input::placeholder{color:#888}
         .search-box button{background:var(--red);border:none;color:#fff;padding:10px 18px;border-radius:25px;cursor:pointer;font-weight:600;transition:0.3s}
         .search-box button:hover{background:#ff0f1f}
-        .upload-btn{background:var(--red);color:#fff;padding:10px 22px;border-radius:25px;text-decoration:none;font-weight:700;font-size:14px;display:none;transition:0.3s}
+        .upload-btn{background:var(--red);color:#fff;padding:10px 22px;border-radius:5px;text-decoration:none;font-weight:700;font-size:14px;display:none;transition:0.3s}
         .upload-btn.show{display:inline-block}
-        .upload-btn:hover{background:#ff0f1f;transform:scale(1.05)}
-        .hero{height:80vh;background:linear-gradient(135deg,#0a0a15 0%,#1a1a2e 50%,#0d0d1a 100%);display:flex;align-items:center;justify-content:center;text-align:center;padding:20px}
-        .hero h1{font-size:3.5rem;font-weight:900;margin-bottom:15px;animation:fadeIn 1s}
+        .upload-btn:hover{background:#ff0f1f}
+        .profile-icon{width:36px;height:36px;border-radius:5px;background:linear-gradient(135deg,#e50914,#ff6b6b);cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
+
+        /* HERO */
+        .hero{height:100vh;background:linear-gradient(135deg,#000 0%,#1a0a0a 30%,#0a0a1a 60%,#000 100%);display:flex;align-items:center;justify-content:center;text-align:center;padding:0 60px;position:relative;overflow:hidden}
+        .hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at center,rgba(229,9,20,0.15) 0%,transparent 70%)}
+        .hero-content{position:relative;z-index:2;max-width:800px}
+        .hero h1{font-size:4rem;font-weight:900;margin-bottom:20px;letter-spacing:-2px;line-height:1.1}
         .hero h1 span{color:var(--red)}
-        .hero p{font-size:1.2rem;color:var(--text2);margin-bottom:30px}
-        @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        .btn{display:inline-block;padding:14px 32px;border-radius:30px;font-weight:700;text-decoration:none;margin:8px;transition:0.3s;font-size:16px}
+        .hero p{font-size:1.4rem;color:var(--text2);margin-bottom:35px;line-height:1.6}
+        .hero-buttons{display:flex;gap:15px;justify-content:center;flex-wrap:wrap}
+        .btn{display:inline-flex;align-items:center;gap:10px;padding:16px 36px;border-radius:5px;font-size:18px;font-weight:700;text-decoration:none;cursor:pointer;transition:0.3s;border:none}
         .btn-red{background:var(--red);color:#fff}
-        .btn-red:hover{background:#ff0f1f;transform:scale(1.05);box-shadow:0 10px 30px rgba(229,9,20,0.4)}
-        .btn-outline{background:rgba(255,255,255,0.08);color:#fff;border:2px solid rgba(255,255,255,0.3)}
-        .btn-outline:hover{background:#fff;color:#000}
-        .container{max-width:1400px;margin:0 auto;padding:30px 20px}
-        .section-title{font-size:1.8rem;font-weight:700;margin-bottom:25px;display:flex;align-items:center;gap:10px}
-        .movie-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:22px}
-        .movie-card{background:var(--bg2);border-radius:14px;overflow:hidden;cursor:pointer;transition:0.35s;position:relative;border:1px solid #2a2a35}
-        .movie-card:hover{transform:translateY(-10px);box-shadow:0 25px 50px rgba(229,9,20,0.25);border-color:var(--red)}
-        .movie-poster{width:100%;height:330px;object-fit:cover;background:var(--bg2)}
-        .play-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:55px;color:#fff;opacity:0;transition:0.3s;text-shadow:0 0 20px rgba(0,0,0,0.5)}
-        .movie-card:hover .play-icon{opacity:1}
-        .movie-info{padding:16px}
-        .movie-title{font-weight:700;font-size:15px;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .movie-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--text2)}
-        .movie-genre{display:inline-block;background:var(--red);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;margin-top:8px}
-        .movie-views{color:var(--gold)}
-        .no-movies{grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--text2)}
-        .no-movies i{font-size:70px;color:var(--red);display:block;margin-bottom:20px}
-        .no-movies h3{font-size:1.5rem;margin-bottom:10px}
-        footer{text-align:center;padding:30px;color:#555;border-top:1px solid #1a1a2e;font-size:13px}
-        .movie-count{color:var(--text2);font-size:14px;font-weight:400}
+        .btn-red:hover{background:#ff0f1f;transform:scale(1.04);box-shadow:0 10px 30px rgba(229,9,20,0.5)}
+        .btn-outline{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.4)}
+        .btn-outline:hover{background:rgba(255,255,255,0.2)}
+        .email-section{margin-top:30px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+        .email-section input{padding:16px 20px;border-radius:5px;border:1px solid rgba(255,255,255,0.3);background:rgba(0,0,0,0.6);color:#fff;font-size:16px;width:350px;outline:none}
+        .email-section input:focus{border-color:var(--red)}
+        .email-section .btn-red{border-radius:5px;padding:16px 30px}
+
+        /* SECTIONS */
+        .section{padding:40px 60px}
+        .section-title{font-size:1.6rem;font-weight:700;margin-bottom:25px;display:flex;align-items:center;gap:10px}
+        .section-title i{color:var(--red)}
+        .movie-row{display:flex;gap:12px;overflow-x:auto;padding:10px 0 20px;scroll-behavior:smooth;scrollbar-width:none}
+        .movie-row::-webkit-scrollbar{display:none}
+        .movie-card{min-width:240px;max-width:240px;border-radius:8px;overflow:hidden;cursor:pointer;transition:0.35s;position:relative;flex-shrink:0;background:var(--bg2)}
+        .movie-card:hover{transform:translateY(-8px) scale(1.03);z-index:10;box-shadow:0 20px 40px rgba(229,9,20,0.3)}
+        .movie-poster{width:100%;height:350px;object-fit:cover;background:var(--bg3)}
+        .movie-info{padding:14px}
+        .movie-title{font-weight:600;font-size:14px;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .movie-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--text2)}
+        .movie-genre{display:inline-block;background:var(--red);padding:3px 10px;border-radius:3px;font-size:10px;font-weight:600;margin-top:6px}
+        .play-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:50px;color:#fff;opacity:0;transition:0.3s}
+        .movie-card:hover .play-overlay{opacity:1}
+
+        /* FAQ */
+        .faq-section{padding:60px;background:var(--bg2)}
+        .faq-title{font-size:2rem;font-weight:700;text-align:center;margin-bottom:30px}
+        .faq-item{background:var(--bg3);margin-bottom:8px;padding:20px 30px;border-radius:5px;cursor:pointer;transition:0.3s;display:flex;justify-content:space-between;align-items:center;font-size:18px}
+        .faq-item:hover{background:#333}
+        .faq-item i{font-size:24px;transition:0.3s}
+
+        /* FOOTER */
+        footer{padding:60px;background:var(--bg2);border-top:1px solid var(--border)}
+        .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;margin-bottom:40px}
+        .footer-col h4{font-size:14px;margin-bottom:15px;color:var(--text2)}
+        .footer-col a{display:block;color:#777;text-decoration:none;font-size:13px;margin-bottom:10px;transition:0.3s}
+        .footer-col a:hover{color:var(--text)}
+        .footer-bottom{text-align:center;color:#555;font-size:12px;padding-top:30px;border-top:1px solid var(--border)}
+
+        .no-movies{text-align:center;padding:60px;color:var(--text2);width:100%}
+        .no-movies i{font-size:60px;color:var(--red);margin-bottom:15px}
+
         @media(max-width:768px){
-            .navbar{padding:12px 15px}
-            .search-box input{width:120px}
-            .hero h1{font-size:2.2rem}
+            .navbar{padding:15px 20px}
+            .nav-links{display:none}
+            .hero h1{font-size:2.5rem}
             .hero p{font-size:1rem}
-            .movie-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+            .section{padding:30px 20px}
+            .movie-card{min-width:160px;max-width:160px}
             .movie-poster{height:240px}
+            .faq-section{padding:30px 20px}
+            footer{padding:30px 20px}
+            .email-section input{width:100%}
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <a href="/" class="logo">ON<span>flix</span></a>
-        <div style="display:flex;gap:15px;align-items:center">
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-left">
+            <a href="/" class="logo">ONflix</a>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#trending">Trending</a></li>
+                <li><a href="#popular">Popular</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+        </div>
+        <div class="nav-right">
             <div class="search-box">
-                <input type="text" id="s" placeholder="Search movies..." onkeypress="if(event.key==='Enter')searchMovies()">
-                <button onclick="searchMovies()"><i class="fas fa-search"></i> Search</button>
+                <input type="text" id="s" placeholder="Search..." onkeypress="if(event.key==='Enter')searchMovies()">
+                <button onclick="searchMovies()"><i class="fas fa-search"></i></button>
             </div>
-            <a href="/admin" class="upload-btn" id="adminBtn"><i class="fas fa-upload"></i> Upload</a>
+            <a href="/admin" class="upload-btn" id="adminBtn">+ Upload</a>
+            <div class="profile-icon" onclick="verifyDevice()">U</div>
         </div>
     </nav>
 
+    <!-- HERO -->
     <section class="hero">
-        <div>
-            <h1>Welcome to <span>ONflix</span></h1>
-            <p>🎬 Watch unlimited movies & dramas anytime, anywhere. Free forever!</p>
-            <a href="#movies" class="btn btn-red" onclick="document.getElementById('movies').scrollIntoView({behavior:'smooth'})"><i class="fas fa-play"></i> Browse Movies</a>
-            <a href="/admin" class="btn btn-outline" id="heroAdminBtn"><i class="fas fa-cloud-upload-alt"></i> Upload Movie</a>
+        <div class="hero-content">
+            <h1>Unlimited <span>movies</span>, TV shows, and more</h1>
+            <p>Watch anywhere. Free forever. Ready to watch? Browse our collection now.</p>
+            <div class="hero-buttons">
+                <a href="#trending" class="btn btn-red" onclick="document.getElementById('trending').scrollIntoView({behavior:'smooth'})"><i class="fas fa-play"></i> Get Started</a>
+                <a href="/admin" class="btn btn-outline" id="heroAdminBtn"><i class="fas fa-upload"></i> Upload</a>
+            </div>
+            <div class="email-section">
+                <input type="email" placeholder="Email address" id="emailInput">
+                <button class="btn btn-red" onclick="subscribe()">Get Started <i class="fas fa-chevron-right"></i></button>
+            </div>
         </div>
     </section>
 
-    <div class="container" id="movies">
-        <h2 class="section-title">
-            <i class="fas fa-fire" style="color:var(--red)"></i> Latest Movies 
-            <span class="movie-count" id="movieCount"></span>
-        </h2>
-        <div class="movie-grid" id="movieGrid">
-            <div class="no-movies"><i class="fas fa-spinner fa-spin"></i><h3>Loading movies...</h3></div>
+    <!-- TRENDING -->
+    <div class="section" id="trending">
+        <h2 class="section-title"><i class="fas fa-fire"></i> Trending Now</h2>
+        <div class="movie-row" id="trendingRow">
+            <div class="no-movies"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>
         </div>
     </div>
 
+    <!-- POPULAR -->
+    <div class="section" id="popular">
+        <h2 class="section-title"><i class="fas fa-star"></i> Popular Movies</h2>
+        <div class="movie-row" id="popularRow">
+            <div class="no-movies"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq-section" id="faq">
+        <h2 class="faq-title">Frequently Asked Questions</h2>
+        <div class="faq-item" onclick="this.querySelector('i').classList.toggle('fa-rotate-45')">
+            What is ONflix? <i class="fas fa-plus"></i>
+        </div>
+        <div class="faq-item" onclick="this.querySelector('i').classList.toggle('fa-rotate-45')">
+            How much does ONflix cost? <i class="fas fa-plus"></i>
+        </div>
+        <div class="faq-item" onclick="this.querySelector('i').classList.toggle('fa-rotate-45')">
+            Where can I watch? <i class="fas fa-plus"></i>
+        </div>
+        <div class="faq-item" onclick="this.querySelector('i').classList.toggle('fa-rotate-45')">
+            How do I upload movies? <i class="fas fa-plus"></i>
+        </div>
+        <div class="faq-item" onclick="this.querySelector('i').classList.toggle('fa-rotate-45')">
+            Is ONflix good for kids? <i class="fas fa-plus"></i>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
     <footer>
-        <p>© 2025 ONflix - All rights reserved | 🛡️ Secured | 🌍 Watch Anywhere</p>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>ONflix</h4>
+                <a href="#">About Us</a>
+                <a href="#">Contact</a>
+                <a href="#">Blog</a>
+            </div>
+            <div class="footer-col">
+                <h4>Help</h4>
+                <a href="#">FAQ</a>
+                <a href="#">Help Center</a>
+                <a href="#">Terms of Use</a>
+            </div>
+            <div class="footer-col">
+                <h4>Account</h4>
+                <a href="#">Admin Panel</a>
+                <a href="#">Privacy</a>
+                <a href="#">Cookie Preferences</a>
+            </div>
+            <div class="footer-col">
+                <h4>Watch</h4>
+                <a href="#">Movies</a>
+                <a href="#">Dramas</a>
+                <a href="#">New Releases</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 ONflix - Pakistan | All Rights Reserved | Made with ❤️</p>
+        </div>
     </footer>
 
     <script>
         const API = location.origin;
-        const DEVICE_KEY = 'onflix_admin_device_verified';
         let allMovies = [];
 
-        // ==================== Admin Detection ====================
-        function checkAdmin() {
-            const isVerified = localStorage.getItem('onflix_admin_verified') === 'true';
-            const adminBtn = document.getElementById('adminBtn');
-            const heroAdminBtn = document.getElementById('heroAdminBtn');
-            
-            if (isVerified) {
-                adminBtn.classList.add('show');
-                heroAdminBtn.style.display = 'inline-block';
-            } else {
-                adminBtn.classList.remove('show');
-                heroAdminBtn.style.display = 'none';
-            }
+        // Navbar scroll
+        window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50));
+
+        // Admin
+        function checkAdmin(){
+            const v=localStorage.getItem('onflix_admin_verified')==='true';
+            document.getElementById('adminBtn').classList.toggle('show',v);
+            document.getElementById('heroAdminBtn').style.display=v?'inline-flex':'none';
+        }
+        async function verifyDevice(){
+            if(localStorage.getItem('onflix_admin_verified')==='true'){alert('✅ Admin access active!');return}
+            const p=prompt('🔐 Admin password:');
+            if(!p)return;
+            try{
+                const r=await fetch(`${API}/api/verify-device`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:p})});
+                const d=await r.json();
+                if(d.success){localStorage.setItem('onflix_admin_verified','true');localStorage.setItem('admin_password',p);checkAdmin();alert('✅ Unlocked!')}
+                else alert('❌ Wrong!')
+            }catch(e){alert('Error!')}
         }
 
-        // Verify device once with password
-        async function verifyDevice() {
-            const verified = localStorage.getItem('onflix_admin_verified');
-            if (verified === 'true') return true;
-            
-            const password = prompt('🔐 Enter admin password to unlock upload features (or Cancel to skip):');
-            if (!password) return false;
-            
-            try {
-                const res = await fetch(`${API}/api/verify-device`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password })
-                });
-                const data = await res.json();
-                if (data.success) {
-                    localStorage.setItem('onflix_admin_verified', 'true');
-                    localStorage.setItem('admin_password', password);
-                    checkAdmin();
-                    alert('✅ Device verified! Upload features unlocked.');
-                    return true;
-                } else {
-                    alert('❌ Wrong password!');
-                    return false;
-                }
-            } catch(e) {
-                alert('❌ Server error! Try again later.');
-                return false;
-            }
+        function movieCard(m){
+            const p=m.posterUrl||'https://via.placeholder.com/240x350/1a1a1a/e50914?text=ONflix';
+            const link=m.youtubeLink?`window.open('${m.youtubeLink}')`:`location.href='/watch/${m.id}'`;
+            return `<div class="movie-card" onclick="${link}"><img class="movie-poster" src="${p}" alt="${m.title}" onerror="this.src='https://via.placeholder.com/240x350/1a1a1a/e50914?text=ONflix'"><div class="play-overlay"><i class="fas fa-play-circle"></i></div><div class="movie-info"><div class="movie-title">${m.title}</div><div class="movie-meta"><span>📅 ${m.year}</span><span>👁 ${m.views||0}</span></div><span class="movie-genre">${m.genre}</span></div></div>`;
         }
-        // =========================================================
 
-        async function loadMovies() {
-            const grid = document.getElementById('movieGrid');
-            const count = document.getElementById('movieCount');
-            try {
-                const res = await fetch(`${API}/api/movies`);
-                allMovies = await res.json();
-                
-                if (!allMovies.length) {
-                    grid.innerHTML = `<div class="no-movies"><i class="fas fa-film"></i><h3>No Movies Yet!</h3><p>Be the first to upload a movie!</p></div>`;
-                    count.textContent = '';
+        async function loadMovies(){
+            try{
+                const r=await fetch(`${API}/api/movies`);
+                allMovies=await r.json();
+                const g1=document.getElementById('trendingRow'),g2=document.getElementById('popularRow');
+                if(!allMovies.length){
+                    g1.innerHTML=g2.innerHTML='<div class="no-movies"><i class="fas fa-film"></i><h3>No Movies Yet</h3></div>';
                     return;
                 }
-                
-                count.textContent = `(${allMovies.length} movies)`;
-                grid.innerHTML = allMovies.map(m => `
-                    <div class="movie-card" onclick="location.href='/watch/${m.id}'">
-                        <img class="movie-poster" src="${m.posterUrl || 'https://via.placeholder.com/220x330/1a1a2e/e50914?text=No+Poster'}" alt="${m.title}" onerror="this.src='https://via.placeholder.com/220x330/1a1a2e/e50914?text=No+Poster'">
-                        <div class="play-icon"><i class="fas fa-play-circle"></i></div>
-                        <div class="movie-info">
-                            <div class="movie-title">${m.title}</div>
-                            <div class="movie-meta">
-                                <span>📅 ${m.year}</span>
-                                <span class="movie-views">👁 ${m.views || 0} views</span>
-                            </div>
-                            <span class="movie-genre">${m.genre}</span>
-                        </div>
-                    </div>
-                `).join('');
-            } catch(e) {
-                grid.innerHTML = `<div class="no-movies"><i class="fas fa-exclamation-triangle"></i><h3>Error loading movies</h3><p>Please try again later.</p></div>`;
-                count.textContent = '';
+                const half=Math.ceil(allMovies.length/2);
+                g1.innerHTML=allMovies.slice(0,half).map(movieCard).join('');
+                g2.innerHTML=allMovies.slice(half).map(movieCard).join('');
+            }catch(e){
+                document.getElementById('trendingRow').innerHTML='<div class="no-movies"><i class="fas fa-exclamation-triangle"></i><h3>Error</h3></div>';
             }
         }
 
-        async function searchMovies() {
-            const q = document.getElementById('s').value.trim();
-            const grid = document.getElementById('movieGrid');
-            const count = document.getElementById('movieCount');
-            
-            if (!q) {
-                await loadMovies();
-                return;
-            }
-            
-            try {
-                const res = await fetch(`${API}/api/search?q=${encodeURIComponent(q)}`);
-                const movies = await res.json();
-                
-                if (!movies.length) {
-                    grid.innerHTML = `<div class="no-movies"><i class="fas fa-search"></i><h3>No results found for "${q}"</h3><p>Try different keywords or browse all movies.</p></div>`;
-                    count.textContent = '';
-                } else {
-                    count.textContent = `(${movies.length} results)`;
-                    grid.innerHTML = movies.map(m => `
-                        <div class="movie-card" onclick="location.href='/watch/${m.id}'">
-                            <img class="movie-poster" src="${m.posterUrl || 'https://via.placeholder.com/220x330/1a1a2e/e50914?text=No+Poster'}" alt="${m.title}" onerror="this.src='https://via.placeholder.com/220x330/1a1a2e/e50914?text=No+Poster'">
-                            <div class="play-icon"><i class="fas fa-play-circle"></i></div>
-                            <div class="movie-info">
-                                <div class="movie-title">${m.title}</div>
-                                <div class="movie-meta">
-                                    <span>📅 ${m.year}</span>
-                                    <span class="movie-views">👁 ${m.views || 0} views</span>
-                                </div>
-                                <span class="movie-genre">${m.genre}</span>
-                            </div>
-                        </div>
-                    `).join('');
-                }
-            } catch(e) {
-                grid.innerHTML = `<div class="no-movies"><i class="fas fa-exclamation-triangle"></i><h3>Search failed</h3><p>Please try again.</p></div>`;
-                count.textContent = '';
-            }
+        async function searchMovies(){
+            const q=document.getElementById('s').value.trim();
+            if(!q){loadMovies();return}
+            try{
+                const r=await fetch(`${API}/api/search?q=${encodeURIComponent(q)}`);
+                const m=await r.json();
+                const g=document.getElementById('trendingRow');
+                g.innerHTML=m.length?m.map(movieCard).join(''):'<div class="no-movies"><i class="fas fa-search"></i><h3>No results for "'+q+'"</h3></div>';
+            }catch(e){}
         }
 
-        // Init
+        function subscribe(){
+            const email=document.getElementById('emailInput').value;
+            if(email)alert('✅ Thanks! We\'ll notify you at '+email);
+            else alert('Please enter email!');
+        }
+
         checkAdmin();
         loadMovies();
-
-        // Click logo to try admin verification
-        document.querySelector('.logo').addEventListener('click', function(e) {
-            e.preventDefault();
-            if (localStorage.getItem('onflix_admin_verified') !== 'true') {
-                verifyDevice();
-            } else {
-                alert('✅ You already have admin access!');
-            }
-        });
     </script>
 </body>
 </html>
