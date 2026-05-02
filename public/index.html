@@ -10,8 +10,6 @@
         :root{--bg:#000000;--bg2:#111111;--bg3:#1a1a1a;--red:#e50914;--gold:#f5c518;--text:#fff;--text2:#b3b3b3;--border:#333}
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-        
-        /* NAVBAR */
         .navbar{position:fixed;top:0;left:0;right:0;z-index:1000;padding:18px 60px;display:flex;align-items:center;justify-content:space-between;transition:0.4s;background:transparent}
         .navbar.scrolled{background:rgba(0,0,0,0.95);backdrop-filter:blur(20px);padding:12px 60px}
         .nav-left{display:flex;align-items:center;gap:40px}
@@ -19,19 +17,19 @@
         .nav-links{display:flex;gap:20px;list-style:none}
         .nav-links a{color:var(--text2);text-decoration:none;font-size:14px;font-weight:500;transition:0.3s}
         .nav-links a:hover,.nav-links a.active{color:var(--text)}
-        .nav-right{display:flex;align-items:center;gap:20px}
+        .nav-right{display:flex;align-items:center;gap:15px}
         .search-box{display:flex;align-items:center;background:rgba(255,255,255,0.1);border-radius:30px;padding:6px 6px 6px 18px;border:1px solid rgba(255,255,255,0.2);transition:0.3s}
         .search-box:focus-within{border-color:var(--red)}
         .search-box input{background:none;border:none;color:#fff;padding:10px;outline:none;width:200px;font-size:14px}
         .search-box input::placeholder{color:#888}
         .search-box button{background:var(--red);border:none;color:#fff;padding:10px 18px;border-radius:25px;cursor:pointer;font-weight:600;transition:0.3s}
         .search-box button:hover{background:#ff0f1f}
+        .nav-btn{background:var(--red);color:#fff;padding:8px 18px;border-radius:5px;text-decoration:none;font-weight:600;font-size:13px;transition:0.3s;border:none;cursor:pointer}
+        .nav-btn:hover{background:#ff0f1f}
+        .nav-btn.outline{background:transparent;border:1px solid var(--text2);color:var(--text)}
+        .nav-btn.outline:hover{background:var(--text);color:#000}
         .upload-btn{background:var(--red);color:#fff;padding:10px 22px;border-radius:5px;text-decoration:none;font-weight:700;font-size:14px;display:none;transition:0.3s}
         .upload-btn.show{display:inline-block}
-        .upload-btn:hover{background:#ff0f1f}
-        .profile-icon{width:36px;height:36px;border-radius:5px;background:linear-gradient(135deg,#e50914,#ff6b6b);cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px}
-
-        /* HERO */
         .hero{height:100vh;background:linear-gradient(135deg,#000 0%,#1a0a0a 30%,#0a0a1a 60%,#000 100%);display:flex;align-items:center;justify-content:center;text-align:center;padding:0 60px;position:relative;overflow:hidden}
         .hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at center,rgba(229,9,20,0.15) 0%,transparent 70%)}
         .hero-content{position:relative;z-index:2;max-width:800px}
@@ -43,13 +41,6 @@
         .btn-red{background:var(--red);color:#fff}
         .btn-red:hover{background:#ff0f1f;transform:scale(1.04);box-shadow:0 10px 30px rgba(229,9,20,0.5)}
         .btn-outline{background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.4)}
-        .btn-outline:hover{background:rgba(255,255,255,0.2)}
-        .email-section{margin-top:30px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-        .email-section input{padding:16px 20px;border-radius:5px;border:1px solid rgba(255,255,255,0.3);background:rgba(0,0,0,0.6);color:#fff;font-size:16px;width:350px;outline:none}
-        .email-section input:focus{border-color:var(--red)}
-        .email-section .btn-red{border-radius:5px;padding:16px 30px}
-
-        /* SECTIONS */
         .section{padding:40px 60px}
         .section-title{font-size:1.6rem;font-weight:700;margin-bottom:25px;display:flex;align-items:center;gap:10px}
         .section-title i{color:var(--red)}
@@ -64,42 +55,32 @@
         .movie-genre{display:inline-block;background:var(--red);padding:3px 10px;border-radius:3px;font-size:10px;font-weight:600;margin-top:6px}
         .play-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:50px;color:#fff;opacity:0;transition:0.3s}
         .movie-card:hover .play-overlay{opacity:1}
-
-        /* FAQ */
         .faq-section{padding:60px;background:var(--bg2)}
         .faq-title{font-size:2rem;font-weight:700;text-align:center;margin-bottom:30px}
         .faq-item{background:var(--bg3);margin-bottom:8px;padding:20px 30px;border-radius:5px;cursor:pointer;transition:0.3s;display:flex;justify-content:space-between;align-items:center;font-size:18px}
         .faq-item:hover{background:#333}
-        .faq-item i{font-size:24px;transition:0.3s}
-
-        /* FOOTER */
         footer{padding:60px;background:var(--bg2);border-top:1px solid var(--border)}
         .footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px;margin-bottom:40px}
         .footer-col h4{font-size:14px;margin-bottom:15px;color:var(--text2)}
         .footer-col a{display:block;color:#777;text-decoration:none;font-size:13px;margin-bottom:10px;transition:0.3s}
         .footer-col a:hover{color:var(--text)}
         .footer-bottom{text-align:center;color:#555;font-size:12px;padding-top:30px;border-top:1px solid var(--border)}
-
         .no-movies{text-align:center;padding:60px;color:var(--text2);width:100%}
         .no-movies i{font-size:60px;color:var(--red);margin-bottom:15px}
-
+        .user-name{color:var(--text);font-weight:600;font-size:14px}
         @media(max-width:768px){
             .navbar{padding:15px 20px}
             .nav-links{display:none}
             .hero h1{font-size:2.5rem}
-            .hero p{font-size:1rem}
             .section{padding:30px 20px}
             .movie-card{min-width:160px;max-width:160px}
             .movie-poster{height:240px}
-            .faq-section{padding:30px 20px}
             footer{padding:30px 20px}
-            .email-section input{width:100%}
         }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
         <div class="nav-left">
             <a href="/" class="logo">ONflix</a>
@@ -116,11 +97,12 @@
                 <button onclick="searchMovies()"><i class="fas fa-search"></i></button>
             </div>
             <a href="/admin" class="upload-btn" id="adminBtn">+ Upload</a>
-            <div class="profile-icon" onclick="verifyDevice()">U</div>
+            <span class="user-name" id="userName"></span>
+            <a href="#" class="nav-btn outline" id="logoutBtn" onclick="logout()" style="display:none;">Logout</a>
+            <a href="/login" class="nav-btn" id="loginBtn">Sign In</a>
         </div>
     </nav>
 
-    <!-- HERO -->
     <section class="hero">
         <div class="hero-content">
             <h1>Unlimited <span>movies</span>, TV shows, and more</h1>
@@ -129,145 +111,121 @@
                 <a href="#trending" class="btn btn-red" onclick="document.getElementById('trending').scrollIntoView({behavior:'smooth'})"><i class="fas fa-play"></i> Get Started</a>
                 <a href="/admin" class="btn btn-outline" id="heroAdminBtn"><i class="fas fa-upload"></i> Upload</a>
             </div>
-            <div class="email-section">
-                <input type="email" placeholder="Email address" id="emailInput">
-                <button class="btn btn-red" onclick="subscribe()">Get Started <i class="fas fa-chevron-right"></i></button>
-            </div>
         </div>
     </section>
 
-    <!-- TRENDING -->
     <div class="section" id="trending">
         <h2 class="section-title"><i class="fas fa-fire"></i> Trending Now</h2>
-        <div class="movie-row" id="trendingRow">
-            <div class="no-movies"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>
-        </div>
+        <div class="movie-row" id="trendingRow"><div class="no-movies"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div></div>
     </div>
 
-    <!-- POPULAR -->
     <div class="section" id="popular">
         <h2 class="section-title"><i class="fas fa-star"></i> Popular Movies</h2>
-        <div class="movie-row" id="popularRow">
-            <div class="no-movies"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>
-        </div>
+        <div class="movie-row" id="popularRow"><div class="no-movies"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div></div>
     </div>
 
-    <!-- FAQ -->
     <div class="faq-section" id="faq">
         <h2 class="faq-title">Frequently Asked Questions</h2>
-        <div class="faq-item" onclick="this.querySelector('i').classList.toggle('fa-rotate-45')">
-            What is ONflix? <i class="fas fa-plus"></i>
-        </div>
-        <div class="faq-item" onclick="this.querySelector('i').classList.toggle('fa-rotate-45')">
-            How much does ONflix cost? <i class="fas fa-plus"></i>
-        </div>
-        <div class="faq-item" onclick="this.querySelector('i').classList.toggle('fa-rotate-45')">
-            Where can I watch? <i class="fas fa-plus"></i>
-        </div>
-        <div class="faq-item" onclick="this.querySelector('i').classList.toggle('fa-rotate-45')">
-            How do I upload movies? <i class="fas fa-plus"></i>
-        </div>
-        <div class="faq-item" onclick="this.querySelector('i').classList.toggle('fa-rotate-45')">
-            Is ONflix good for kids? <i class="fas fa-plus"></i>
-        </div>
+        <div class="faq-item">What is ONflix? <i class="fas fa-plus"></i></div>
+        <div class="faq-item">How much does ONflix cost? <i class="fas fa-plus"></i></div>
+        <div class="faq-item">Where can I watch? <i class="fas fa-plus"></i></div>
+        <div class="faq-item">How do I upload movies? <i class="fas fa-plus"></i></div>
+        <div class="faq-item">Is ONflix good for kids? <i class="fas fa-plus"></i></div>
     </div>
 
-    <!-- FOOTER -->
     <footer>
         <div class="footer-grid">
-            <div class="footer-col">
-                <h4>ONflix</h4>
-                <a href="#">About Us</a>
-                <a href="#">Contact</a>
-                <a href="#">Blog</a>
-            </div>
-            <div class="footer-col">
-                <h4>Help</h4>
-                <a href="#">FAQ</a>
-                <a href="#">Help Center</a>
-                <a href="#">Terms of Use</a>
-            </div>
-            <div class="footer-col">
-                <h4>Account</h4>
-                <a href="#">Admin Panel</a>
-                <a href="#">Privacy</a>
-                <a href="#">Cookie Preferences</a>
-            </div>
-            <div class="footer-col">
-                <h4>Watch</h4>
-                <a href="#">Movies</a>
-                <a href="#">Dramas</a>
-                <a href="#">New Releases</a>
-            </div>
+            <div class="footer-col"><h4>ONflix</h4><a href="#">About Us</a><a href="#">Contact</a><a href="#">Blog</a></div>
+            <div class="footer-col"><h4>Help</h4><a href="#">FAQ</a><a href="#">Help Center</a><a href="#">Terms of Use</a></div>
+            <div class="footer-col"><h4>Account</h4><a href="/login">Sign In</a><a href="/signup">Sign Up</a><a href="#">Privacy</a></div>
+            <div class="footer-col"><h4>Watch</h4><a href="#">Movies</a><a href="#">Dramas</a><a href="#">New Releases</a></div>
         </div>
-        <div class="footer-bottom">
-            <p>© 2025 ONflix - Pakistan | All Rights Reserved | Made with ❤️</p>
-        </div>
+        <div class="footer-bottom"><p>© 2025 ONflix - Pakistan | All Rights Reserved | Made with ❤️</p></div>
     </footer>
 
     <script>
         const API = location.origin;
         let allMovies = [];
+        const token = localStorage.getItem('onflix_token');
+        const user = JSON.parse(localStorage.getItem('onflix_user') || '{}');
 
-        // Navbar scroll
-        window.addEventListener('scroll',()=>document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>50));
-
-        // Admin
-        function checkAdmin(){
-            const v=localStorage.getItem('onflix_admin_verified')==='true';
-            document.getElementById('adminBtn').classList.toggle('show',v);
-            document.getElementById('heroAdminBtn').style.display=v?'inline-flex':'none';
-        }
-        async function verifyDevice(){
-            if(localStorage.getItem('onflix_admin_verified')==='true'){alert('✅ Admin access active!');return}
-            const p=prompt('🔐 Admin password:');
-            if(!p)return;
-            try{
-                const r=await fetch(`${API}/api/verify-device`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:p})});
-                const d=await r.json();
-                if(d.success){localStorage.setItem('onflix_admin_verified','true');localStorage.setItem('admin_password',p);checkAdmin();alert('✅ Unlocked!')}
-                else alert('❌ Wrong!')
-            }catch(e){alert('Error!')}
+        // ==================== LOGIN CHECK ====================
+        if (!token) {
+            document.getElementById('loginBtn').style.display = 'inline-block';
+            document.getElementById('logoutBtn').style.display = 'none';
+            document.getElementById('userName').textContent = '';
+        } else {
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('logoutBtn').style.display = 'inline-block';
+            document.getElementById('userName').textContent = '👤 ' + (user.name || 'User');
         }
 
-        function movieCard(m){
-            const p=m.posterUrl||'https://via.placeholder.com/240x350/1a1a1a/e50914?text=ONflix';
-            const link=m.youtubeLink?`window.open('${m.youtubeLink}')`:`location.href='/watch/${m.id}'`;
+        function logout() {
+            localStorage.removeItem('onflix_token');
+            localStorage.removeItem('onflix_user');
+            localStorage.removeItem('onflix_admin_verified');
+            window.location.href = '/login';
+        }
+
+        // Add token to all fetch requests
+        const origFetch = fetch;
+        fetch = function(url, options = {}) {
+            if (token) {
+                options.headers = options.headers || {};
+                options.headers['Authorization'] = 'Bearer ' + token;
+            }
+            return origFetch(url, options);
+        };
+        // =====================================================
+
+        window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50));
+
+        function checkAdmin() {
+            const v = localStorage.getItem('onflix_admin_verified') === 'true';
+            document.getElementById('adminBtn').classList.toggle('show', v);
+            document.getElementById('heroAdminBtn').style.display = v ? 'inline-flex' : 'none';
+        }
+
+        async function verifyDevice() {
+            if (localStorage.getItem('onflix_admin_verified') === 'true') { alert('✅ Admin access active!'); return; }
+            const p = prompt('🔐 Admin password:');
+            if (!p) return;
+            try {
+                const r = await fetch(`${API}/api/verify-device`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: p }) });
+                const d = await r.json();
+                if (d.success) { localStorage.setItem('onflix_admin_verified', 'true'); checkAdmin(); alert('✅ Unlocked!'); }
+                else alert('❌ Wrong!');
+            } catch(e) { alert('Error!'); }
+        }
+
+        function movieCard(m) {
+            const p = m.posterUrl || 'https://via.placeholder.com/240x350/1a1a1a/e50914?text=ONflix';
+            const link = m.youtubeLink ? `window.open('${m.youtubeLink}')` : `location.href='/watch/${m.id}'`;
             return `<div class="movie-card" onclick="${link}"><img class="movie-poster" src="${p}" alt="${m.title}" onerror="this.src='https://via.placeholder.com/240x350/1a1a1a/e50914?text=ONflix'"><div class="play-overlay"><i class="fas fa-play-circle"></i></div><div class="movie-info"><div class="movie-title">${m.title}</div><div class="movie-meta"><span>📅 ${m.year}</span><span>👁 ${m.views||0}</span></div><span class="movie-genre">${m.genre}</span></div></div>`;
         }
 
-        async function loadMovies(){
-            try{
-                const r=await fetch(`${API}/api/movies`);
-                allMovies=await r.json();
-                const g1=document.getElementById('trendingRow'),g2=document.getElementById('popularRow');
-                if(!allMovies.length){
-                    g1.innerHTML=g2.innerHTML='<div class="no-movies"><i class="fas fa-film"></i><h3>No Movies Yet</h3></div>';
-                    return;
-                }
-                const half=Math.ceil(allMovies.length/2);
-                g1.innerHTML=allMovies.slice(0,half).map(movieCard).join('');
-                g2.innerHTML=allMovies.slice(half).map(movieCard).join('');
-            }catch(e){
-                document.getElementById('trendingRow').innerHTML='<div class="no-movies"><i class="fas fa-exclamation-triangle"></i><h3>Error</h3></div>';
-            }
+        async function loadMovies() {
+            if (!token) { document.getElementById('trendingRow').innerHTML = '<div class="no-movies"><i class="fas fa-lock"></i><h3>Please <a href="/login" style="color:var(--red)">Sign In</a> to watch movies</h3></div>'; return; }
+            try {
+                const r = await fetch(`${API}/api/movies`);
+                allMovies = await r.json();
+                const g1 = document.getElementById('trendingRow'), g2 = document.getElementById('popularRow');
+                if (!allMovies.length) { g1.innerHTML = g2.innerHTML = '<div class="no-movies"><i class="fas fa-film"></i><h3>No Movies Yet</h3></div>'; return; }
+                const half = Math.ceil(allMovies.length / 2);
+                g1.innerHTML = allMovies.slice(0, half).map(movieCard).join('');
+                g2.innerHTML = allMovies.slice(half).map(movieCard).join('');
+            } catch(e) { document.getElementById('trendingRow').innerHTML = '<div class="no-movies"><i class="fas fa-exclamation-triangle"></i><h3>Please login first</h3></div>'; }
         }
 
-        async function searchMovies(){
-            const q=document.getElementById('s').value.trim();
-            if(!q){loadMovies();return}
-            try{
-                const r=await fetch(`${API}/api/search?q=${encodeURIComponent(q)}`);
-                const m=await r.json();
-                const g=document.getElementById('trendingRow');
-                g.innerHTML=m.length?m.map(movieCard).join(''):'<div class="no-movies"><i class="fas fa-search"></i><h3>No results for "'+q+'"</h3></div>';
-            }catch(e){}
-        }
-
-        function subscribe(){
-            const email=document.getElementById('emailInput').value;
-            if(email)alert('✅ Thanks! We\'ll notify you at '+email);
-            else alert('Please enter email!');
+        async function searchMovies() {
+            const q = document.getElementById('s').value.trim();
+            if (!q) { loadMovies(); return; }
+            try {
+                const r = await fetch(`${API}/api/search?q=${encodeURIComponent(q)}`);
+                const m = await r.json();
+                const g = document.getElementById('trendingRow');
+                g.innerHTML = m.length ? m.map(movieCard).join('') : '<div class="no-movies"><i class="fas fa-search"></i><h3>No results for "' + q + '"</h3></div>';
+            } catch(e) {}
         }
 
         checkAdmin();
