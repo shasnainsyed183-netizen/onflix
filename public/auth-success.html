@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8"><title>ONflix - Login Success</title></head><body>
+<script>
+    const params = new URLSearchParams(window.location.search);
+    localStorage.setItem('onflix_token', params.get('token'));
+    localStorage.setItem('onflix_user', JSON.stringify({name: params.get('name'), email: params.get('email')}));
+    window.location.href = '/';
+</script>
+</body></html>
