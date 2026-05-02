@@ -281,6 +281,7 @@ app.get('/contact', (req, res) => res.sendFile(path.join(__dirname, 'public', 'c
 // Protected routes (login required)
 app.get('/browse', authRequired, (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 app.get('/profile', authRequired, (req, res) => res.sendFile(path.join(__dirname, 'public', 'profile.html')));
+app.get('/myprofile', authRequired, (req, res) => res.sendFile(path.join(__dirname, 'public', 'myprofile.html')));
 app.get('/watch/:id', authRequired, (req, res) => res.sendFile(path.join(__dirname, 'public', 'player.html')));
 
 app.listen(PORT, () => console.log(`\n🎬 ONflix PRO: http://localhost:${PORT}\n👥 Users: ${getUsers().length}\n🎬 Movies: ${getMovies().length}\n`));
