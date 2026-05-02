@@ -9,17 +9,26 @@ const jwt = require('jsonwebtoken');
 const session = require('express-session');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 const uuidv4 = () => crypto.randomUUID();
 const app = express();
 const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'onflix_super_secret_key_2025';
 
-// ==================== GOOGLE CREDENTIALS (FROM ENV) ====================
+// ==================== GOOGLE CREDENTIALS ====================
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
 const CALLBACK_URL = process.env.CALLBACK_URL || 'https://onflix-production.up.railway.app';
-// =====================================================================
+
+// ==================== CLOUDINARY CONFIG ====================
+cloudinary.config({
+    cloud_name: 'dia6yxhsj',
+    api_key: '796297943479477',
+    api_secret: 'wVOK1o49EYc7YV4ee6kzvFxpTIc'
+});
+// ==========================================================
 
 app.use(cors());
 app.use(express.json());
@@ -73,10 +82,7 @@ function authRequired(req, res, next) {
     const token = req.headers['authorization']?.replace('Bearer ', '');
     if (req.isAuthenticated && req.isAuthenticated()) return next();
     if (token) {
-        try {
-            req.user = jwt.verify(token, JWT_SECRET);
-            return next();
-        } catch(e) {}
+        try { req.user = jwt.verify(token, JWT_SECRET); return next(); } catch(e) {}
     }
     return res.status(401).json({ error: 'Please login first' });
 }
@@ -94,12 +100,10 @@ function requireAdmin(req, res, next) {
 
 // ==================== GOOGLE AUTH ROUTES ====================
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-
 app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
     const token = jwt.sign({ id: req.user.id, email: req.user.email, name: req.user.name }, JWT_SECRET, { expiresIn: '7d' });
     res.redirect(`/auth-success?token=${token}&name=${req.user.name}&email=${req.user.email}`);
 });
-
 app.get('/auth-success', (req, res) => res.sendFile(path.join(__dirname, 'public', 'auth-success.html')));
 // ==========================================================
 
@@ -129,37 +133,41 @@ app.post('/api/login', async (req, res) => {
     res.json({ success: true, token, user: { id: user.id, name: user.name, email: user.email } });
 });
 
-app.get('/api/me', authRequired, (req, res) => {
-    const users = getUsers();
-    const user = users.find(u => u.id === req.user.id);
-    if (!user) return res.status(404).json({ error: 'User not found' });
-    res.json({ id: user.id, name: user.name, email: user.email });
-});
-
+app.get('/api/me', authRequired, (req, res) => res.json(req.user));
 app.post('/api/verify-device', (req, res) => {
     const { password } = req.body;
     if (password === ADMIN_PASSWORD) res.json({ success: true, deviceKey: ADMIN_DEVICE_KEY });
     else res.status(401).json({ error: 'Wrong password' });
 });
-// =======================================================
+// ==========================================================
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        if (file.fieldname === 'poster') cb(null, 'posters/');
-        else cb(null, 'uploads/');
-    },
-    filename: (req, file, cb) => cb(null, uuidv4() + path.extname(file.originalname))
+// ==================== CLOUDINARY STORAGE ====================
+const videoStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'onflix_videos',
+        resource_type: 'video',
+        format: async (req, file) => 'mp4',
+    }
 });
 
-const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 * 1024 } });
+const posterStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'onflix_posters',
+        format: async (req, file) => 'jpg',
+    }
+});
+
+const uploadVideo = multer({ storage: videoStorage, limits: { fileSize: 500 * 1024 * 1024 } });
+const uploadPoster = multer({ storage: posterStorage });
+// ==========================================================
 
 // ==================== MOVIE ROUTES ====================
 app.get('/api/movies', authRequired, (req, res) => {
     let movies = getMovies().reverse();
     const genre = req.query.genre;
-    if (genre && genre !== 'all') {
-        movies = movies.filter(m => m.genre === genre);
-    }
+    if (genre && genre !== 'all') movies = movies.filter(m => m.genre === genre);
     res.json(movies);
 });
 
@@ -184,8 +192,7 @@ app.get('/api/search', authRequired, (req, res) => {
     res.json(movies);
 });
 
-app.post('/api/movies', requireAdmin, upload.fields([{ name: 'video' }, { name: 'poster' }]), (req, res) => {
-    if ((!req.files || !req.files.video) && !req.body.youtubeLink) return res.status(400).json({ error: 'Video file ya YouTube link dono mein se ek zaroori hai' });
+app.post('/api/movies', requireAdmin, uploadVideo.fields([{ name: 'video' }, { name: 'poster' }]), (req, res) => {
     const { title, description, genre, year, duration, director, cast, youtubeLink } = req.body;
     const movies = getMovies();
     const movie = {
@@ -197,8 +204,8 @@ app.post('/api/movies', requireAdmin, upload.fields([{ name: 'video' }, { name: 
         duration: duration || 'Unknown',
         director: director || 'Unknown',
         cast: cast || 'Unknown',
-        videoUrl: req.files && req.files.video ? '/uploads/' + req.files.video[0].filename : null,
-        posterUrl: req.files && req.files.poster ? '/posters/' + req.files.poster[0].filename : null,
+        videoUrl: req.files && req.files.video ? req.files.video[0].path : null,
+        posterUrl: req.files && req.files.poster ? req.files.poster[0].path : null,
         filename: req.files && req.files.video ? req.files.video[0].originalname : null,
         youtubeLink: youtubeLink || null,
         views: 0,
@@ -213,31 +220,17 @@ app.delete('/api/movies/:id', requireAdmin, (req, res) => {
     const movies = getMovies();
     const i = movies.findIndex(m => m.id === req.params.id);
     if (i === -1) return res.status(404).json({ error: 'Not found' });
-    const m = movies[i];
-    try { if (m.videoUrl) fs.unlinkSync(path.join(__dirname, m.videoUrl)); } catch(e) {}
-    try { if (m.posterUrl) fs.unlinkSync(path.join(__dirname, m.posterUrl)); } catch(e) {}
     movies.splice(i, 1);
     saveMovies(movies);
-    res.json({ success: true, message: 'Movie deleted!' });
+    res.json({ success: true });
 });
 
 app.get('/api/stream/:id', authRequired, (req, res) => {
     const movie = getMovies().find(m => m.id === req.params.id);
     if (!movie) return res.status(404).end();
     if (movie.youtubeLink) return res.redirect(movie.youtubeLink);
-    const vp = path.join(__dirname, movie.videoUrl);
-    if (!fs.existsSync(vp)) return res.status(404).end();
-    const stat = fs.statSync(vp);
-    const range = req.headers.range;
-    if (range) {
-        const [start, end] = range.replace(/bytes=/, '').split('-').map(Number);
-        const e = end || stat.size - 1;
-        res.writeHead(206, { 'Content-Range': `bytes ${start}-${e}/${stat.size}`, 'Accept-Ranges': 'bytes', 'Content-Length': e - start + 1, 'Content-Type': 'video/mp4' });
-        fs.createReadStream(vp, { start, end: e }).pipe(res);
-    } else {
-        res.writeHead(200, { 'Content-Length': stat.size, 'Content-Type': 'video/mp4' });
-        fs.createReadStream(vp).pipe(res);
-    }
+    if (movie.videoUrl && movie.videoUrl.includes('cloudinary')) return res.redirect(movie.videoUrl);
+    res.status(404).json({ error: 'Video not available' });
 });
 
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
@@ -246,4 +239,4 @@ app.get('/signup', (req, res) => res.sendFile(path.join(__dirname, 'public', 'si
 app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, 'public', 'admin.html')));
 app.get('/watch/:id', (req, res) => res.sendFile(path.join(__dirname, 'public', 'player.html')));
 
-app.listen(PORT, () => console.log(`\n🎬 ONflix + Google Auth: http://localhost:${PORT}\n`));
+app.listen(PORT, () => console.log(`\n🎬 ONflix Cloud: http://localhost:${PORT}\n`));
