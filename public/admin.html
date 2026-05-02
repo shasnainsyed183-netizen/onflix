@@ -3,204 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONflix - Upload Movie</title>
+    <title>ONflix - Admin Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root{--bg:#000;--bg2:#111;--bg3:#1a1a1a;--red:#e50914;--text:#fff;--text2:#b3b3b3;--border:#333}
+        :root{--bg:#0a0a0f;--bg2:#12121a;--bg3:#1a1a24;--red:#e50914;--gold:#f5c518;--text:#fff;--text2:#aaa;--border:#222}
         *{margin:0;padding:0;box-sizing:border-box}
-        body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-        body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at top,rgba(229,9,20,0.1),transparent 60%),radial-gradient(ellipse at bottom,rgba(0,0,0,0.8),transparent);z-index:-1}
-
-        .upload-container{background:var(--bg2);padding:40px;border-radius:10px;max-width:650px;width:100%;border:1px solid var(--border);box-shadow:0 30px 60px rgba(0,0,0,0.7)}
-        .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
-        .header h1{font-size:28px;font-weight:700;color:var(--text)}
-        .header h1 i{color:var(--red);margin-right:10px}
-        .header .nav-btns{display:flex;gap:10px}
-        .btn-sm{padding:8px 16px;border-radius:5px;border:none;font-size:12px;font-weight:600;cursor:pointer;transition:0.3s;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
-        .btn-outline-sm{background:transparent;color:var(--text2);border:1px solid var(--border)}
-        .btn-outline-sm:hover{background:var(--bg3);color:var(--text)}
-        .btn-danger-sm{background:transparent;color:#e74c3c;border:1px solid #e74c3c}
-        .btn-danger-sm:hover{background:#e74c3c;color:#fff}
-
-        .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-        .form-group{margin-bottom:16px}
+        body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex}
+        .sidebar{position:fixed;top:0;left:0;bottom:0;width:220px;background:var(--bg2);border-right:1px solid var(--border);padding:20px 0;z-index:999}
+        .sidebar .logo{font-size:1.6rem;font-weight:900;color:var(--red);text-align:center;margin-bottom:30px}
+        .sidebar .menu{list-style:none}
+        .sidebar .menu li a{display:flex;align-items:center;gap:10px;padding:12px 20px;color:var(--text2);text-decoration:none;font-size:13px;cursor:pointer;transition:0.3s}
+        .sidebar .menu li a:hover,.sidebar .menu li a.active{color:var(--text);background:rgba(229,9,20,0.15);border-right:3px solid var(--red)}
+        .main{margin-left:220px;flex:1;padding:25px}
+        .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
+        .topbar h1{font-size:1.8rem}
+        .topbar .btn-sm{padding:8px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:none;text-decoration:none}
+        .btn-red{background:var(--red);color:#fff}.btn-outline{background:transparent;color:#fff;border:1px solid #555}
+        .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:30px}
+        .stat-card{background:var(--bg3);padding:20px;border-radius:12px;border:1px solid var(--border);display:flex;align-items:center;gap:15px}
+        .stat-card i{font-size:30px;color:var(--red)}
+        .stat-card .stat-value{font-size:1.8rem;font-weight:700}
+        .stat-card .stat-label{color:var(--text2);font-size:12px}
+        .section-title{font-size:1.2rem;font-weight:700;margin-bottom:15px}
+        .table{width:100%;border-collapse:collapse;margin-bottom:30px}
+        .table th,.table td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--border);font-size:13px}
+        .table th{color:var(--text2);font-weight:600;font-size:11px;text-transform:uppercase}
+        .table tr:hover{background:rgba(229,9,20,0.05)}
+        .badge{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:600}
+        .badge-success{background:#2ecc71;color:#fff}.badge-info{background:#3498db;color:#fff}.badge-warning{background:var(--gold);color:#000}
+        .upload-section{background:var(--bg3);padding:25px;border-radius:12px;border:1px solid var(--border);margin-bottom:20px}
+        .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+        .form-group{margin-bottom:14px}
         .form-group.full{grid-column:1/-1}
-        label{display:block;margin-bottom:6px;font-weight:600;color:var(--text2);font-size:13px;text-transform:uppercase;letter-spacing:0.5px}
-        input,textarea,select{width:100%;padding:14px;border-radius:5px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-size:15px;transition:0.3s;font-family:'Helvetica Neue',Arial,sans-serif}
-        input:focus,textarea:focus,select:focus{border-color:var(--red);outline:none;background:#222}
-        textarea{height:90px;resize:vertical}
-        select{appearance:none;cursor:pointer}
-        select option{background:var(--bg3);color:var(--text)}
-        
-        .file-upload{border:2px dashed var(--border);padding:25px;text-align:center;border-radius:5px;cursor:pointer;transition:0.3s;background:var(--bg3)}
-        .file-upload:hover{border-color:var(--red);background:#1a1a1a}
-        .file-upload i{font-size:40px;color:var(--red);margin-bottom:10px;display:block}
-        .file-upload p{color:var(--text2);font-size:13px}
-        .file-upload input{display:none}
-
-        .btn-submit{width:100%;padding:16px;background:var(--red);color:#fff;border:none;border-radius:5px;font-size:18px;font-weight:700;cursor:pointer;transition:0.3s;margin-top:10px;text-transform:uppercase;letter-spacing:1px}
-        .btn-submit:hover{background:#ff0f1f;transform:scale(1.01);box-shadow:0 10px 30px rgba(229,9,20,0.4)}
-        .btn-submit:disabled{opacity:0.5;cursor:not-allowed}
-
-        .msg{padding:14px;border-radius:5px;margin-top:15px;display:none;font-weight:600;text-align:center}
-        .msg.info{background:#3498db;color:#fff;display:block}
-        .msg.success{background:#2ecc71;color:#fff;display:block}
-        .msg.error{background:#e74c3c;color:#fff;display:block}
-
-        .back-link{text-align:center;margin-top:20px}
-        .back-link a{color:var(--text2);text-decoration:none;font-size:13px;transition:0.3s}
-        .back-link a:hover{color:var(--text)}
-
-        .or-divider{text-align:center;color:var(--text2);font-size:13px;margin:10px 0;position:relative}
-        .or-divider::before,.or-divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--border)}
-        .or-divider::before{left:0}.or-divider::after{right:0}
-
-        @media(max-width:768px){.form-grid{grid-template-columns:1fr}.upload-container{padding:25px}}
+        label{display:block;margin-bottom:5px;font-weight:600;color:var(--text2);font-size:11px;text-transform:uppercase}
+        input,textarea,select{width:100%;padding:12px;border-radius:8px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:14px;font-family:'Segoe UI',Arial,sans-serif}
+        textarea{height:70px;resize:vertical}
+        .btn-submit{width:100%;padding:14px;background:var(--red);color:#fff;border:none;border-radius:8px;font-size:16px;font-weight:700;cursor:pointer}
+        .btn-submit:hover{background:#ff0f1f}
+        .msg{padding:12px;border-radius:8px;margin-top:12px;display:none;font-weight:600;text-align:center}
+        .msg.s{background:#2ecc71}.msg.e{background:#e74c3c}.msg.i{background:#3498db}
+        @media(max-width:768px){.sidebar{display:none}.main{margin-left:0}.form-grid{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
-    <div class="upload-container">
-        <div class="header">
-            <h1><i class="fas fa-cloud-upload-alt"></i> Upload Movie</h1>
-            <div class="nav-btns">
-                <a href="/" class="btn-sm btn-outline-sm"><i class="fas fa-home"></i> Home</a>
-                <button class="btn-sm btn-danger-sm" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    <aside class="sidebar">
+        <div class="logo">ONflix</div>
+        <ul class="menu">
+            <li><a class="active" onclick="showSection('dashboard')"><i class="fas fa-th-large"></i> Dashboard</a></li>
+            <li><a onclick="showSection('upload')"><i class="fas fa-cloud-upload-alt"></i> Upload Movie</a></li>
+            <li><a onclick="showSection('movies')"><i class="fas fa-film"></i> All Movies</a></li>
+            <li><a onclick="showSection('users')"><i class="fas fa-users"></i> Users</a></li>
+            <li><a href="/"><i class="fas fa-home"></i> View Site</a></li>
+            <li><a onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </aside>
+    <div class="main">
+        <div class="topbar">
+            <h1 id="pageTitle">Dashboard</h1>
+            <div>
+                <a href="/" class="btn-sm btn-outline"><i class="fas fa-eye"></i> View Site</a>
+                <button class="btn-sm btn-red" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
         </div>
 
-        <form id="uploadForm" enctype="multipart/form-data">
-            <div class="form-grid">
-                <div class="form-group full">
-                    <label>📌 Movie Title *</label>
-                    <input type="text" name="title" required placeholder="Enter movie title...">
-                </div>
-                <div class="form-group full">
-                    <label>📝 Description</label>
-                    <textarea name="description" placeholder="About the movie..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label>🎭 Genre</label>
-                    <select name="genre">
-                        <option>Action</option><option>Comedy</option><option>Drama</option>
-                        <option>Horror</option><option>Romance</option><option>Thriller</option>
-                        <option>Sci-Fi</option><option>Pakistani Drama</option><option>Turkish Drama</option>
-                        <option>Hollywood</option><option>Bollywood</option><option>Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>📅 Year</label>
-                    <input type="number" name="year" value="2025" placeholder="2025">
-                </div>
-                <div class="form-group">
-                    <label>⏱️ Duration</label>
-                    <input type="text" name="duration" placeholder="2h 15min">
-                </div>
-                <div class="form-group">
-                    <label>🎬 Director</label>
-                    <input type="text" name="director" placeholder="Director name">
-                </div>
-                <div class="form-group full">
-                    <label>👥 Cast</label>
-                    <input type="text" name="cast" placeholder="Actor 1, Actor 2, Actor 3">
-                </div>
-                <div class="form-group full">
-                    <label>🎥 Movie File (MP4/MKV)</label>
-                    <div class="file-upload" onclick="document.getElementById('videoFile').click()">
-                        <i class="fas fa-video"></i>
-                        <p id="videoLabel">Click to choose video file</p>
-                        <input type="file" id="videoFile" name="video" accept="video/*" onchange="document.getElementById('videoLabel').textContent=this.files[0]?.name||'Click to choose video file'">
+        <!-- Dashboard -->
+        <div id="dashboardSection">
+            <div class="stats-grid" id="statsGrid"></div>
+            <h2 class="section-title">📋 Recent Users</h2>
+            <div id="recentUsers"></div>
+            <h2 class="section-title">🎬 Recent Movies</h2>
+            <div id="recentMovies"></div>
+        </div>
+
+        <!-- Upload -->
+        <div id="uploadSection" style="display:none">
+            <div class="upload-section">
+                <h2 style="margin-bottom:20px">🎬 Upload New Movie</h2>
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div class="form-grid">
+                        <div class="form-group full"><label>Title *</label><input type="text" name="title" required></div>
+                        <div class="form-group full"><label>Description</label><textarea name="description"></textarea></div>
+                        <div class="form-group"><label>Genre</label><select name="genre"><option>Action</option><option>Comedy</option><option>Drama</option><option>Horror</option><option>Sci-Fi</option><option>Pakistani Drama</option><option>Turkish Drama</option><option>Other</option></select></div>
+                        <div class="form-group"><label>Year</label><input type="number" name="year" value="2025"></div>
+                        <div class="form-group"><label>Duration</label><input type="text" name="duration" placeholder="2h 15min"></div>
+                        <div class="form-group"><label>IMDb Rating</label><input type="text" name="imdbRating" placeholder="8.5"></div>
+                        <div class="form-group"><label>Director</label><input type="text" name="director"></div>
+                        <div class="form-group"><label>Cast</label><input type="text" name="cast" placeholder="Actor 1, Actor 2"></div>
+                        <div class="form-group"><label>Producer</label><input type="text" name="producer"></div>
+                        <div class="form-group full"><label>YouTube Link</label><input type="text" name="youtubeLink" placeholder="https://youtu.be/xxxxx"></div>
+                        <div class="form-group full"><label>OR Movie File (MP4)</label><input type="file" name="video" accept="video/*"></div>
+                        <div class="form-group full"><label>Poster Image</label><input type="file" name="poster" accept="image/*"></div>
                     </div>
-                </div>
-                <div class="form-group full">
-                    <div class="or-divider">OR</div>
-                </div>
-                <div class="form-group full">
-                    <label>🔗 YouTube Link</label>
-                    <input type="text" name="youtubeLink" placeholder="https://youtu.be/xxxxx">
-                </div>
-                <div class="form-group full">
-                    <label>🖼️ Poster Image (Optional)</label>
-                    <div class="file-upload" onclick="document.getElementById('posterFile').click()">
-                        <i class="fas fa-image"></i>
-                        <p id="posterLabel">Click to choose poster image</p>
-                        <input type="file" id="posterFile" name="poster" accept="image/*" onchange="document.getElementById('posterLabel').textContent=this.files[0]?.name||'Click to choose poster image'">
-                    </div>
-                </div>
+                    <button type="submit" class="btn-submit"><i class="fas fa-rocket"></i> Upload Movie</button>
+                </form>
+                <div class="msg" id="uploadMsg"></div>
             </div>
-            <button type="submit" class="btn-submit" id="submitBtn">
-                <i class="fas fa-rocket"></i> Upload Movie Now
-            </button>
-        </form>
-        <div class="msg" id="msg"></div>
-        <div class="back-link">
-            <a href="/"><i class="fas fa-arrow-left"></i> Back to ONflix</a>
+        </div>
+
+        <!-- Movies List -->
+        <div id="moviesSection" style="display:none">
+            <h2 class="section-title">🎬 All Movies</h2>
+            <div id="moviesList"></div>
+        </div>
+
+        <!-- Users List -->
+        <div id="usersSection" style="display:none">
+            <h2 class="section-title">👥 All Users</h2>
+            <div id="usersList"></div>
         </div>
     </div>
 
     <script>
-        const API = location.origin;
-        const adminKey = localStorage.getItem('admin_device_key') || '';
+        const API=location.origin;
+        const adminKey=localStorage.getItem('admin_device_key')||'';
 
-        function logout() {
-            localStorage.removeItem('admin_device_key');
-            localStorage.removeItem('onflix_admin_verified');
-            localStorage.removeItem('admin_password');
-            alert('✅ Logged out! Upload features disabled.');
-            window.location.href = '/';
+        function logout(){localStorage.removeItem('admin_device_key');window.location.href='/';}
+
+        function showSection(section){
+            document.getElementById('pageTitle').textContent=section==='dashboard'?'Dashboard':section==='upload'?'Upload Movie':section==='movies'?'All Movies':'Users';
+            document.getElementById('dashboardSection').style.display=section==='dashboard'?'block':'none';
+            document.getElementById('uploadSection').style.display=section==='upload'?'block':'none';
+            document.getElementById('moviesSection').style.display=section==='movies'?'block':'none';
+            document.getElementById('usersSection').style.display=section==='users'?'block':'none';
+            document.querySelectorAll('.sidebar .menu li a').forEach(a=>a.classList.remove('active'));
+            if(section==='dashboard')loadStats();
+            if(section==='movies')loadMoviesList();
+            if(section==='users')loadUsersList();
         }
 
-        function showMsg(text, type) {
-            const msg = document.getElementById('msg');
-            msg.textContent = text;
-            msg.className = 'msg ' + type;
-            msg.style.display = 'block';
+        async function loadStats(){
+            try{
+                const r=await fetch(`${API}/api/admin/stats?key=${adminKey}`,{headers:{'x-device-key':adminKey}});
+                const d=await r.json();
+                document.getElementById('statsGrid').innerHTML=`
+                    <div class="stat-card"><i class="fas fa-users"></i><div><div class="stat-value">${d.totalUsers}</div><div class="stat-label">Total Users</div></div></div>
+                    <div class="stat-card"><i class="fas fa-film"></i><div><div class="stat-value">${d.totalMovies}</div><div class="stat-label">Total Movies</div></div></div>
+                    <div class="stat-card"><i class="fas fa-eye"></i><div><div class="stat-value">${d.totalViews}</div><div class="stat-label">Total Views</div></div></div>
+                `;
+                document.getElementById('recentUsers').innerHTML=d.recentUsers.map(u=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">👤 ${u.name} • ${u.email} • <span class="badge badge-info">${u.provider||'email'}</span> • ${new Date(u.createdAt).toLocaleDateString()}</div>`).join('')||'No users yet';
+                document.getElementById('recentMovies').innerHTML=d.recentMovies.map(m=>`<div style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">🎬 ${m.title} • 👁 ${m.views} views • 📅 ${new Date(m.uploadDate).toLocaleDateString()}</div>`).join('')||'No movies yet';
+            }catch(e){}
         }
 
-        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+        async function loadMoviesList(){
+            const r=await fetch(`${API}/api/movies`,{headers:{'Authorization':'Bearer '+localStorage.getItem('onflix_token')}});
+            const movies=await r.json();
+            document.getElementById('moviesList').innerHTML=movies.length?`<table class="table"><tr><th>Title</th><th>Genre</th><th>Year</th><th>Views</th><th>Action</th></tr>${movies.map(m=>`<tr><td>${m.title}</td><td><span class="badge badge-warning">${m.genre}</span></td><td>${m.year}</td><td>👁 ${m.views||0}</td><td><button class="btn-sm btn-red" onclick="deleteMovie('${m.id}')">Delete</button></td></tr>`).join('')}</table>`:'<p>No movies</p>';
+        }
+
+        async function loadUsersList(){
+            const r=await fetch(`${API}/api/admin/users?key=${adminKey}`,{headers:{'x-device-key':adminKey}});
+            const users=await r.json();
+            document.getElementById('usersList').innerHTML=users.length?`<table class="table"><tr><th>Name</th><th>Email</th><th>Provider</th><th>Joined</th><th>Last Login</th></tr>${users.map(u=>`<tr><td>${u.name}</td><td>${u.email}</td><td><span class="badge badge-info">${u.provider||'email'}</span></td><td>${new Date(u.createdAt).toLocaleDateString()}</td><td>${new Date(u.lastLogin).toLocaleDateString()}</td></tr>`).join('')}</table>`:'<p>No users</p>';
+        }
+
+        async function deleteMovie(id){
+            if(!confirm('Delete this movie?'))return;
+            await fetch(`${API}/api/movies/${id}?key=${adminKey}`,{method:'DELETE',headers:{'x-device-key':adminKey}});
+            loadMoviesList();loadStats();
+        }
+
+        document.getElementById('uploadForm').addEventListener('submit',async function(e){
             e.preventDefault();
-            
-            const formData = new FormData(this);
-            const submitBtn = document.getElementById('submitBtn');
-            
-            const videoFile = document.getElementById('videoFile').files[0];
-            const youtubeLink = formData.get('youtubeLink')?.trim();
-            
-            if (!videoFile && !youtubeLink) {
-                showMsg('❌ Please choose a video file OR enter a YouTube link!', 'error');
-                return;
-            }
-            
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
-            showMsg('⏳ Uploading... Please wait...', 'info');
-            
-            try {
-                const res = await fetch(`${API}/api/movies?key=${adminKey}`, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'x-device-key': adminKey
-                    }
-                });
-                
-                const data = await res.json();
-                
-                if (data.success) {
-                    showMsg('✅ Movie uploaded successfully! Redirecting...', 'success');
-                    this.reset();
-                    document.getElementById('videoLabel').textContent = 'Click to choose video file';
-                    document.getElementById('posterLabel').textContent = 'Click to choose poster image';
-                    setTimeout(() => window.location.href = '/', 2000);
-                } else {
-                    throw new Error(data.error || 'Upload failed');
-                }
-            } catch(err) {
-                showMsg('❌ Error: ' + err.message, 'error');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-rocket"></i> Upload Movie Now';
-            }
+            const fd=new FormData(this);
+            const msg=document.getElementById('uploadMsg');
+            msg.className='msg i';msg.textContent='⏳ Uploading...';msg.style.display='block';
+            try{
+                const r=await fetch(`${API}/api/movies?key=${adminKey}`,{method:'POST',body:fd,headers:{'x-device-key':adminKey}});
+                const d=await r.json();
+                if(d.success){msg.className='msg s';msg.textContent='✅ Uploaded!';this.reset();setTimeout(()=>{msg.style.display='none';showSection('dashboard')},2000)}
+                else throw new Error(d.error||'Failed');
+            }catch(err){msg.className='msg e';msg.textContent='❌ '+err.message}
         });
+
+        loadStats();
     </script>
 </body>
 </html>
