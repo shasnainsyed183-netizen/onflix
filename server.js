@@ -274,6 +274,7 @@ app.get('/admin', (req, res) => {
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
 app.get('/signup', (req, res) => res.sendFile(path.join(__dirname, 'public', 'signup.html')));
+app.get('/profile', (req, res) => res.sendFile(path.join(__dirname, 'public', 'profile.html')));
 app.get('/watch/:id', (req, res) => res.sendFile(path.join(__dirname, 'public', 'player.html')));
 
 app.listen(PORT, () => console.log(`\n🎬 ONflix PRO: http://localhost:${PORT}\n👥 Users: ${getUsers().length}\n🎬 Movies: ${getMovies().length}\n`));
