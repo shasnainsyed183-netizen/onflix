@@ -153,7 +153,15 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 * 1024 } });
 
-app.get('/api/movies', authRequired, (req, res) => res.json(getMovies().reverse()));
+// ==================== MOVIE ROUTES ====================
+app.get('/api/movies', authRequired, (req, res) => {
+    let movies = getMovies().reverse();
+    const genre = req.query.genre;
+    if (genre && genre !== 'all') {
+        movies = movies.filter(m => m.genre === genre);
+    }
+    res.json(movies);
+});
 
 app.get('/api/movies/:id', authRequired, (req, res) => {
     const movies = getMovies();
