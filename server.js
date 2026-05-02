@@ -15,22 +15,22 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const uuidv4 = () => crypto.randomUUID();
 const app = express();
 const PORT = process.env.PORT || 5000;
-const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(32).toString('hex');
+const JWT_SECRET = process.env.JWT_SECRET || 'onflix_ultra_secure_jwt_secret_2025';
 const RATE_LIMIT = {};
 
 // ==================== CONFIG ====================
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET || '';
 const CALLBACK_URL = process.env.CALLBACK_URL || 'https://onflix-production.up.railway.app';
-const ADMIN_PASSWORD_HASH = '$2a$10$' + crypto.randomBytes(16).toString('hex'); // Will be set on first run
-const ADMIN_DEVICE_KEY = crypto.randomBytes(32).toString('hex');
+const ADMIN_DEVICE_KEY = process.env.ADMIN_DEVICE_KEY || crypto.randomBytes(32).toString('hex');
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Shash@123';
 let adminPasswordHash = null;
 
 // ==================== CLOUDINARY ====================
 cloudinary.config({
-    cloud_name: 'dia6yxhsj',
-    api_key: '796297943479477',
-    api_secret: 'wVOK1o49EYc7YV4ee6kzvFxpTIc'
+    cloud_name: process.env.CLOUD_NAME || 'dia6yxhsj',
+    api_key: process.env.CLOUD_API_KEY || '796297943479477',
+    api_secret: process.env.CLOUD_API_SECRET || 'wVOK1o49EYc7YV4ee6kzvFxpTIc'
 });
 
 // ==================== MIDDLEWARE ====================
@@ -41,17 +41,15 @@ app.use(session({ secret: JWT_SECRET, resave: false, saveUninitialized: false })
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Rate Limiting
 app.use((req, res, next) => {
     const ip = req.ip;
     if (!RATE_LIMIT[ip]) RATE_LIMIT[ip] = { count: 0, reset: Date.now() + 60000 };
     if (Date.now() > RATE_LIMIT[ip].reset) RATE_LIMIT[ip] = { count: 0, reset: Date.now() + 60000 };
     RATE_LIMIT[ip].count++;
-    if (RATE_LIMIT[ip].count > 100) return res.status(429).json({ error: 'Too many requests' });
+    if (RATE_LIMIT[ip].count > 200) return res.status(429).json({ error: 'Too many requests' });
     next();
 });
 
-// Brute Force Protection
 const loginAttempts = {};
 function checkBruteForce(ip) {
     if (!loginAttempts[ip]) loginAttempts[ip] = { count: 0, blocked: false, unblock: 0 };
@@ -62,9 +60,9 @@ function checkBruteForce(ip) {
 function recordFailedAttempt(ip) {
     if (!loginAttempts[ip]) loginAttempts[ip] = { count: 0, blocked: false, unblock: 0 };
     loginAttempts[ip].count++;
-    if (loginAttempts[ip].count >= 3) {
+    if (loginAttempts[ip].count >= 5) {
         loginAttempts[ip].blocked = true;
-        loginAttempts[ip].unblock = Date.now() + 900000; // 15 min block
+        loginAttempts[ip].unblock = Date.now() + 900000;
     }
 }
 
@@ -78,14 +76,13 @@ const saveMovies = (m) => fs.writeFileSync(DB, JSON.stringify(m, null, 2));
 const getUsers = () => JSON.parse(fs.readFileSync(USERS_DB));
 const saveUsers = (u) => fs.writeFileSync(USERS_DB, JSON.stringify(u, null, 2));
 
-// ==================== INIT ADMIN PASSWORD ====================
-async function initAdminPassword() {
+// ==================== INIT ADMIN ====================
+async function initAdmin() {
     if (!adminPasswordHash) {
-        const password = process.env.ADMIN_PASSWORD || 'Shash@123';
-        adminPasswordHash = await bcrypt.hash(password, 12);
+        adminPasswordHash = await bcrypt.hash(ADMIN_PASSWORD, 12);
     }
 }
-initAdminPassword();
+initAdmin();
 
 // ==================== PASSPORT ====================
 passport.use(new GoogleStrategy({ clientID: GOOGLE_CLIENT_ID, clientSecret: GOOGLE_CLIENT_SECRET, callbackURL: CALLBACK_URL + '/auth/google/callback' },
@@ -99,7 +96,7 @@ passport.use(new GoogleStrategy({ clientID: GOOGLE_CLIENT_ID, clientSecret: GOOG
         return done(null, user);
     }));
 passport.serializeUser((u, d) => d(null, u.id));
-passport.deserializeUser((id, d) => { const u = getUsers().find(u => u.id === id); d(null, u); });
+passport.deserializeUser((id, d) => { d(null, getUsers().find(u => u.id === id)); });
 
 // ==================== AUTH MIDDLEWARE ====================
 function authRequired(req, res, next) {
@@ -114,18 +111,18 @@ async function requireAdmin(req, res, next) {
     const deviceKey = req.headers['x-device-key'] || req.query.key;
     const ip = req.ip;
     
-    if (checkBruteForce(ip)) return res.status(429).json({ error: 'Too many attempts. Try again in 15 minutes.' });
+    if (checkBruteForce(ip)) return res.status(429).json({ error: 'Blocked for 15 minutes' });
     if (deviceKey === ADMIN_DEVICE_KEY) return next();
-    if (password && await bcrypt.compare(password, adminPasswordHash)) return next();
+    if (password && adminPasswordHash && await bcrypt.compare(password, adminPasswordHash)) return next();
     
     recordFailedAttempt(ip);
     return res.status(401).json({ error: 'Unauthorized' });
 }
 
 // ==================== STORAGE ====================
-const videoStorage = new CloudinaryStorage({ cloudinary, params: { folder: 'onflix_videos', resource_type: 'video', format: 'mp4' } });
-const posterStorage = new CloudinaryStorage({ cloudinary, params: { folder: 'onflix_posters', format: 'jpg' } });
-const uploadVideo = multer({ storage: videoStorage, limits: { fileSize: 500 * 1024 * 1024 }, fileFilter: (req, file, cb) => { const ext = path.extname(file.originalname).toLowerCase(); ['.mp4','.mkv','.webm'].includes(ext) ? cb(null, true) : cb(new Error('Only MP4/MKV/WEBM')); } });
+const videoStorage = new CloudinaryStorage({ cloudinary, params: { folder: 'onflix_videos', resource_type: 'video' } });
+const posterStorage = new CloudinaryStorage({ cloudinary, params: { folder: 'onflix_posters' } });
+const uploadVideo = multer({ storage: videoStorage, limits: { fileSize: 500 * 1024 * 1024 } });
 const uploadPoster = multer({ storage: posterStorage });
 
 // ==================== ROUTES ====================
@@ -141,8 +138,7 @@ app.post('/api/signup', async (req, res) => {
     if (!name || !email || !password || password.length < 6) return res.status(400).json({ error: 'Invalid data' });
     const users = getUsers();
     if (users.find(u => u.email === email)) return res.status(400).json({ error: 'Email exists' });
-    const hashed = await bcrypt.hash(password, 12);
-    const user = { id: uuidv4(), name, email, password: hashed, createdAt: new Date().toISOString() };
+    const user = { id: uuidv4(), name, email, password: await bcrypt.hash(password, 12), createdAt: new Date().toISOString() };
     users.push(user); saveUsers(users);
     const token = jwt.sign({ id: user.id, email, name }, JWT_SECRET, { expiresIn: '7d' });
     res.json({ success: true, token, user: { id: user.id, name, email } });
@@ -150,19 +146,22 @@ app.post('/api/signup', async (req, res) => {
 
 app.post('/api/login', async (req, res) => {
     const ip = req.ip;
-    if (checkBruteForce(ip)) return res.status(429).json({ error: 'Blocked for 15 minutes' });
+    if (checkBruteForce(ip)) return res.status(429).json({ error: 'Blocked' });
     const { email, password } = req.body;
-    const users = getUsers();
-    const user = users.find(u => u.email === email);
-    if (!user?.password) { recordFailedAttempt(ip); return res.status(401).json({ error: 'Invalid credentials' }); }
-    if (!await bcrypt.compare(password, user.password)) { recordFailedAttempt(ip); return res.status(401).json({ error: 'Invalid credentials' }); }
+    const user = getUsers().find(u => u.email === email);
+    if (!user?.password || !await bcrypt.compare(password, user.password)) {
+        recordFailedAttempt(ip);
+        return res.status(401).json({ error: 'Invalid credentials' });
+    }
     const token = jwt.sign({ id: user.id, email, name: user.name }, JWT_SECRET, { expiresIn: '7d' });
     res.json({ success: true, token, user: { id: user.id, name: user.name, email: user.email } });
 });
 
 app.post('/api/verify-device', async (req, res) => {
     const { password } = req.body;
-    if (password && await bcrypt.compare(password, adminPasswordHash)) return res.json({ success: true, deviceKey: ADMIN_DEVICE_KEY });
+    if (password && adminPasswordHash && await bcrypt.compare(password, adminPasswordHash)) {
+        return res.json({ success: true, deviceKey: ADMIN_DEVICE_KEY });
+    }
     res.status(401).json({ error: 'Wrong password' });
 });
 
@@ -218,7 +217,6 @@ app.get('/api/stream/:id', authRequired, (req, res) => {
     res.status(404).end();
 });
 
-// Admin page with password protection
 app.get('/admin', (req, res) => {
     const key = req.query.key;
     if (key === ADMIN_DEVICE_KEY) return res.sendFile(path.join(__dirname, 'public', 'admin.html'));
@@ -239,4 +237,4 @@ app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'log
 app.get('/signup', (req, res) => res.sendFile(path.join(__dirname, 'public', 'signup.html')));
 app.get('/watch/:id', (req, res) => res.sendFile(path.join(__dirname, 'public', 'player.html')));
 
-app.listen(PORT, () => console.log(`\n🛡️ ONflix SECURE: http://localhost:${PORT}\n`));
+app.listen(PORT, () => console.log(`\n🛡️ ONflix SECURE: http://localhost:${PORT}\n🔑 Admin: ${ADMIN_PASSWORD}\n`));
