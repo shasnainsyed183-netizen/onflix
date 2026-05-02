@@ -2,8 +2,21 @@
 <html><head><meta charset="UTF-8"><title>ONflix - Login Success</title></head><body>
 <script>
     const params = new URLSearchParams(window.location.search);
-    localStorage.setItem('onflix_token', params.get('token'));
-    localStorage.setItem('onflix_user', JSON.stringify({name: params.get('name'), email: params.get('email')}));
-    window.location.href = '/';
+    const token = params.get('token');
+    const name = params.get('name');
+    const email = params.get('email');
+    const avatar = params.get('avatar') || '';
+    
+    if (token) {
+        localStorage.setItem('onflix_token', token);
+        localStorage.setItem('onflix_user', JSON.stringify({
+            name: decodeURIComponent(name || 'User'),
+            email: email || '',
+            avatar: avatar
+        }));
+    }
+    
+    // Redirect to browse/dashboard
+    window.location.href = '/browse';
 </script>
 </body></html>
