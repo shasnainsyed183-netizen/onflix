@@ -3,91 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ONflix — Stream Beyond Limits</title>
+    <title>ONflix — Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root{--bg:#0a0a12;--bg2:#12121f;--bg3:#1a1a2a;--red:#e50914;--gold:#f5c518;--text:#fff;--text2:#8a8a9a;--border:#1e1e30;--radius:14px;--radius-sm:10px}
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex}
-        
-        /* SIDEBAR */
-        .sidebar{position:fixed;top:0;left:0;bottom:0;width:230px;background:var(--bg2);border-right:1px solid var(--border);padding:20px 0;z-index:999;overflow-y:auto;display:flex;flex-direction:column}
-        .sidebar .logo{font-size:1.6rem;font-weight:900;color:var(--red);text-align:center;margin-bottom:20px}
-        .sidebar .user-card{display:flex;align-items:center;gap:12px;padding:15px;margin:0 12px 20px;background:var(--bg3);border-radius:var(--radius-sm)}
-        .sidebar .user-card img{width:40px;height:40px;border-radius:50%;object-fit:cover}
-        .sidebar .user-card .uname{font-weight:600;font-size:13px}.sidebar .user-card .uplan{font-size:10px;color:var(--gold)}
-        .sidebar .menu{list-style:none;flex:1}
+        .sidebar{position:fixed;top:0;left:0;bottom:0;width:230px;background:var(--bg2);border-right:1px solid var(--border);padding:20px 0;z-index:999;overflow-y:auto}
+        .sidebar .logo{font-size:1.6rem;font-weight:900;color:var(--red);text-align:center;margin-bottom:25px}
+        .sidebar .menu{list-style:none}
         .sidebar .menu li a{display:flex;align-items:center;gap:12px;padding:11px 20px;color:var(--text2);text-decoration:none;font-size:13px;cursor:pointer;transition:0.3s}
         .sidebar .menu li a:hover,.sidebar .menu li a.active{color:var(--text);background:rgba(229,9,20,0.1);border-right:3px solid var(--red)}
         .sidebar .menu li a i{width:18px;text-align:center}
-        .sidebar .upgrade-btn{display:block;margin:15px 15px 0;padding:12px;background:linear-gradient(135deg,var(--red),#ff4757);color:#fff;text-align:center;border-radius:25px;font-weight:700;font-size:13px;text-decoration:none}
-        
-        /* MAIN */
         .main{margin-left:230px;flex:1;padding:20px 25px}
         
-        /* TOP BAR */
-        .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:25px;gap:20px}
+        .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:20px}
         .search-box{display:flex;align-items:center;background:var(--bg2);border-radius:30px;padding:10px 20px;border:1px solid var(--border);flex:1;max-width:500px}
         .search-box input{background:none;border:none;color:#fff;padding:6px;outline:none;flex:1;font-size:14px}
         .search-box button{background:var(--red);border:none;color:#fff;padding:10px 18px;border-radius:25px;cursor:pointer}
         .topbar-right{display:flex;align-items:center;gap:15px}
-        .btn-outline{padding:8px 16px;border:1px solid #555;border-radius:20px;color:#fff;background:transparent;cursor:pointer;font-size:12px;text-decoration:none;font-weight:600}
-        .btn-red{padding:8px 16px;background:var(--red);color:#fff;border:none;border-radius:20px;cursor:pointer;font-size:12px;font-weight:600;text-decoration:none}
-        
-        /* STATS ROW */
-        .stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-bottom:25px}
-        .stat-card{background:var(--bg2);padding:20px;border-radius:var(--radius);border:1px solid var(--border);display:flex;align-items:center;gap:15px}
-        .stat-card i{font-size:30px;color:var(--red)}.stat-card .val{font-size:1.6rem;font-weight:700}.stat-card .lbl{color:var(--text2);font-size:11px}
-        
-        /* HERO FEATURED */
-        .featured{position:relative;border-radius:var(--radius);overflow:hidden;height:380px;margin-bottom:25px;background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:30px}
-        .featured::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(0deg,var(--bg) 10%,transparent 70%)}
-        .featured-info{position:relative;z-index:2;max-width:500px}
-        .featured-info h2{font-size:2rem;font-weight:800;margin-bottom:6px}
-        .featured-info .meta{color:var(--gold);font-size:13px;margin-bottom:10px}
-        
-        /* SECTION */
-        .section{margin-bottom:25px}
-        .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
-        .section-title{font-size:1.2rem;font-weight:700}.section-title i{color:var(--red);margin-right:8px}
-        .see-all{color:var(--red);font-size:12px;text-decoration:none;font-weight:600}
-        
-        /* MOVIE GRID */
-        .movie-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:14px}
-        .movie-card{background:var(--bg2);border-radius:var(--radius-sm);overflow:hidden;cursor:pointer;transition:0.3s;position:relative;border:1px solid var(--border)}
-        .movie-card:hover{transform:translateY(-5px);border-color:var(--red);box-shadow:0 15px 30px rgba(229,9,20,0.2)}
-        .movie-poster{width:100%;height:220px;object-fit:cover}
-        .movie-info{padding:12px}
-        .movie-title{font-weight:600;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .movie-year{font-size:10px;color:var(--gold);margin-top:2px}
-        .movie-genre{display:inline-block;background:var(--red);color:#fff;padding:2px 8px;border-radius:15px;font-size:9px;font-weight:600;margin-top:4px}
-        .play-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:40px;color:#fff;opacity:0;transition:0.3s}
-        .movie-card:hover .play-overlay{opacity:1}
-        
-        /* HORIZONTAL ROW */
-        .h-row{display:flex;gap:14px;overflow-x:auto;padding-bottom:15px;scrollbar-width:none}
-        .h-row::-webkit-scrollbar{display:none}
-        .h-card{min-width:200px;max-width:200px;background:var(--bg2);border-radius:var(--radius-sm);overflow:hidden;cursor:pointer;transition:0.3s;flex-shrink:0;border:1px solid var(--border)}
-        .h-card:hover{transform:translateY(-5px);border-color:var(--red)}
-        .h-card img{width:100%;height:130px;object-fit:cover}.h-card .h-info{padding:10px}.h-card .h-title{font-size:12px;font-weight:600}.h-card .h-meta{font-size:10px;color:var(--text2)}
-        
-        .empty-state{grid-column:1/-1;text-align:center;padding:60px;color:var(--text2)}
-        .user-menu{position:relative;cursor:pointer}.user-dropdown{position:absolute;top:100%;right:0;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-sm);min-width:160px;display:none;z-index:99}
+        .user-menu{position:relative;cursor:pointer}
+        .user-menu img{width:34px;height:34px;border-radius:50%;object-fit:cover}
+        .user-dropdown{position:absolute;top:100%;right:0;background:var(--bg3);border:1px solid var(--border);border-radius:10px;min-width:160px;display:none;z-index:99}
         .user-menu:hover .user-dropdown{display:block}
         .user-dropdown a,.user-dropdown button{display:block;padding:10px 15px;color:var(--text2);font-size:12px;text-decoration:none;background:none;border:none;width:100%;text-align:left;cursor:pointer}
         .user-dropdown a:hover,.user-dropdown button:hover{background:rgba(229,9,20,0.15);color:#fff}
+        
+        /* SLIDER */
+        .slider-container{position:relative;border-radius:var(--radius);overflow:hidden;height:420px;margin-bottom:25px;background:var(--bg2)}
+        .slide{position:absolute;top:0;left:0;right:0;bottom:0;background-size:cover;background-position:center;opacity:0;transition:opacity 0.8s ease;display:flex;align-items:flex-end;padding:40px}
+        .slide.active{opacity:1}
+        .slide::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(0deg,var(--bg) 8%,transparent 70%)}
+        .slide-info{position:relative;z-index:2;max-width:500px}
+        .slide-info h2{font-size:2rem;font-weight:800;margin-bottom:6px}
+        .slide-info .meta{color:var(--gold);font-size:13px;margin-bottom:8px}
+        .slide-info .btns{display:flex;gap:10px;margin-top:12px}
+        .btn{padding:9px 20px;border-radius:20px;font-weight:700;font-size:12px;cursor:pointer;border:none;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:0.3s}
+        .btn-red{background:var(--red);color:#fff}.btn-outline{background:rgba(255,255,255,0.1);color:#fff;border:1px solid #555}
+        .slider-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:5;background:rgba(0,0,0,0.7);border:none;color:#fff;font-size:20px;padding:12px 16px;cursor:pointer;border-radius:50%;transition:0.3s}
+        .slider-nav:hover{background:var(--red)}.slider-nav.prev{left:15px}.slider-nav.next{right:15px}
+        .dots{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:5}
+        .dot{width:10px;height:10px;border-radius:50%;background:#555;cursor:pointer;transition:0.3s}
+        .dot.active{background:var(--red);transform:scale(1.3)}
+        
+        .section{margin-bottom:25px}.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+        .section-title{font-size:1.2rem;font-weight:700}.see-all{color:var(--red);font-size:12px;text-decoration:none;font-weight:600}
+        .movie-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:14px}
+        .movie-card{background:var(--bg2);border-radius:var(--radius-sm);overflow:hidden;cursor:pointer;transition:0.3s;position:relative;border:1px solid var(--border)}
+        .movie-card:hover{transform:translateY(-5px);border-color:var(--red)}
+        .movie-poster{width:100%;height:220px;object-fit:cover}
+        .movie-info{padding:12px}.movie-title{font-weight:600;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+        .movie-year{font-size:10px;color:var(--gold);margin-top:2px}.movie-genre{display:inline-block;background:var(--red);color:#fff;padding:2px 8px;border-radius:15px;font-size:9px;margin-top:4px}
+        .play-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:40px;color:#fff;opacity:0;transition:0.3s}
+        .movie-card:hover .play-overlay{opacity:1}
+        .h-row{display:flex;gap:14px;overflow-x:auto;padding-bottom:15px;scrollbar-width:none}
+        .h-row::-webkit-scrollbar{display:none}
+        .h-card{min-width:200px;max-width:200px;background:var(--bg2);border-radius:var(--radius-sm);overflow:hidden;cursor:pointer;transition:0.3s;flex-shrink:0;border:1px solid var(--border)}
+        .h-card:hover{transform:translateY(-5px);border-color:var(--red)}.h-card img{width:100%;height:130px;object-fit:cover}
+        .h-card .h-info{padding:10px}.h-card .h-title{font-size:12px;font-weight:600}
         .logout-confirm{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:9999}
         .logout-confirm.show{display:flex}.logout-dialog{background:var(--bg3);padding:25px;border-radius:15px;text-align:center;max-width:380px;width:90%}
-        
-        @media(max-width:768px){.sidebar{display:none}.main{margin-left:0;padding:15px}.featured{height:250px}.movie-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}.movie-poster{height:180px}.h-card{min-width:150px;max-width:150px}}
+        @media(max-width:768px){.sidebar{display:none}.main{margin-left:0;padding:15px}.slider-container{height:280px}.movie-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}.movie-poster{height:180px}}
     </style>
 </head>
 <body>
     <aside class="sidebar">
         <div class="logo">ONflix</div>
-        <div class="user-card" id="sidebarUser">
-            <img src="https://via.placeholder.com/40" id="sidebarAvatar"><div><div class="uname" id="sidebarName">User</div><div class="uplan">Free Member</div></div>
-        </div>
         <ul class="menu">
             <li><a class="active" onclick="filterMovies('all',this)"><i class="fas fa-home"></i> Home</a></li>
             <li><a onclick="filterMovies('Action',this)"><i class="fas fa-bolt"></i> Action</a></li>
@@ -98,56 +79,68 @@
             <li><a onclick="filterMovies('Pakistani Drama',this)"><i class="fas fa-tv"></i> Pakistani</a></li>
             <li><a onclick="filterMovies('Turkish Drama',this)"><i class="fas fa-globe"></i> Turkish</a></li>
         </ul>
-        <a href="/profile" class="upgrade-btn"><i class="fas fa-crown"></i> My Profile</a>
     </aside>
     <div class="main">
         <div class="topbar">
             <div class="search-box"><input type="text" id="s" placeholder="Search movies, actors..." oninput="liveSearch()"><button onclick="searchMovies()"><i class="fas fa-search"></i></button></div>
             <div class="topbar-right">
                 <span id="topUserName" style="font-size:13px;color:var(--text2)"></span>
-                <div class="user-menu"><img id="topAvatar" style="width:34px;height:34px;border-radius:50%;cursor:pointer;object-fit:cover" src="https://via.placeholder.com/34">
-                    <div class="user-dropdown"><a href="/profile"><i class="fas fa-user"></i> My Profile</a><a href="/admin" id="adminLink" style="display:none"><i class="fas fa-cog"></i> Admin</a><hr style="border-color:#333;margin:4px 0"><button onclick="showLogoutConfirm()"><i class="fas fa-sign-out-alt"></i> Logout</button></div>
-                </div>
-                <a href="/login" class="btn-red" id="loginBtn">Sign In</a>
+                <div class="user-menu"><img id="topAvatar" src="https://via.placeholder.com/34"><div class="user-dropdown"><a href="/profile"><i class="fas fa-user"></i> My Profile</a><a href="/admin" id="adminLink" style="display:none"><i class="fas fa-cog"></i> Admin</a><hr style="border-color:#333;margin:4px 0"><button onclick="showLogoutConfirm()"><i class="fas fa-sign-out-alt"></i> Logout</button></div></div>
             </div>
         </div>
-        <div class="stats-row" id="statsRow"></div>
-        <div class="featured" id="featuredBanner"><div class="featured-info"><h2>Welcome to ONflix</h2><p style="color:var(--text2)">Stream unlimited movies</p></div></div>
-        <div class="section"><div class="section-header"><h2 class="section-title"><i class="fas fa-fire"></i> Trending Now</h2><a href="#" class="see-all">See All <i class="fas fa-chevron-right"></i></a></div><div class="movie-grid" id="trendingGrid"></div></div>
-        <div class="section"><div class="section-header"><h2 class="section-title"><i class="fas fa-star"></i> Popular Movies</h2><a href="#" class="see-all">See All <i class="fas fa-chevron-right"></i></a></div><div class="h-row" id="popularRow"></div></div>
-        <div class="section"><div class="section-header"><h2 class="section-title"><i class="fas fa-clock"></i> Recently Added</h2></div><div class="movie-grid" id="recentGrid"></div></div>
+        <div class="slider-container" id="slider"><div class="dots" id="dots"></div></div>
+        <div class="section"><div class="section-header"><h2 class="section-title"><i class="fas fa-fire"></i> Trending Now</h2></div><div class="movie-grid" id="trendingGrid"></div></div>
+        <div class="section"><div class="section-header"><h2 class="section-title"><i class="fas fa-star"></i> Popular Movies</h2></div><div class="h-row" id="popularRow"></div></div>
     </div>
-    <div class="logout-confirm" id="logoutConfirm"><div class="logout-dialog"><h3>Are you sure?</h3><p style="color:var(--text2);margin:10px 0">You will be signed out.</p><button class="btn-outline" onclick="closeLogoutConfirm()">Cancel</button> <button class="btn-red" onclick="doLogout()">Logout</button></div></div>
+    <div class="logout-confirm" id="logoutConfirm"><div class="logout-dialog"><h3>Are you sure?</h3><p style="color:var(--text2);margin:10px 0">You will be signed out.</p><button class="btn btn-outline" onclick="closeLogoutConfirm()">Cancel</button> <button class="btn btn-red" onclick="doLogout()">Logout</button></div></div>
     <script>
-        const API=location.origin,token=localStorage.getItem('onflix_token'),user=JSON.parse(localStorage.getItem('onflix_user')||'{}');
-        if(!token){document.getElementById('loginBtn').style.display='inline-block'}else{
-            document.getElementById('loginBtn').style.display='none';
-            document.getElementById('topUserName').textContent=user.name||'User';
-            if(user.avatar){document.getElementById('topAvatar').src=user.avatar;document.getElementById('sidebarAvatar').src=user.avatar}
-            document.getElementById('sidebarName').textContent=user.name||'User';
-            if(localStorage.getItem('admin_device_key'))document.getElementById('adminLink').style.display='block';
-        }
+        const token=localStorage.getItem('onflix_token');
+        if(!token)window.location.href='/login-form';
+        const API=location.origin,user=JSON.parse(localStorage.getItem('onflix_user')||'{}');
+        document.getElementById('topUserName').textContent=user.name||'User';
+        if(user.avatar)document.getElementById('topAvatar').src=user.avatar;
+        if(localStorage.getItem('admin_device_key'))document.getElementById('adminLink').style.display='block';
         function showLogoutConfirm(){document.getElementById('logoutConfirm').classList.add('show')}
         function closeLogoutConfirm(){document.getElementById('logoutConfirm').classList.remove('show')}
-        async function doLogout(){try{await fetch(API+'/api/logout',{method:'POST',headers:{'Authorization':'Bearer '+token}})}catch(e){}localStorage.clear();window.location.href='/login'}
+        async function doLogout(){try{await fetch(API+'/api/logout',{method:'POST',headers:{'Authorization':'Bearer '+token}})}catch(e){}localStorage.clear();window.location.href='/'}
         const origFetch=fetch;fetch=function(u,o={}){if(token){o.headers=o.headers||{};o.headers['Authorization']='Bearer '+token}return origFetch(u,o)};
         
+        let allMovies=[],currentSlide=0,slideInterval;
         function card(m){const p=m.posterUrl||'https://via.placeholder.com/165x220/1a1a2e/e50914?text=ONflix';return`<div class="movie-card" onclick="location.href='/watch/${m.id}'"><img class="movie-poster" src="${p}" loading="lazy" onerror="this.src='https://via.placeholder.com/165x220/1a1a2e/e50914?text=ONflix'"><div class="play-overlay"><i class="fas fa-play-circle"></i></div><div class="movie-info"><div class="movie-title">${m.title}</div><div class="movie-year">📅 ${m.year} | 👁 ${m.views||0}</div><span class="movie-genre">${m.genre}</span></div></div>`}
-        function hCard(m){const p=m.posterUrl||'https://via.placeholder.com/200x130/1a1a2e/e50914';return`<div class="h-card" onclick="location.href='/watch/${m.id}'"><img src="${p}" loading="lazy" onerror="this.src='https://via.placeholder.com/200x130/1a1a2e/e50914'"><div class="h-info"><div class="h-title">${m.title}</div><div class="h-meta">${m.genre} • ${m.year}</div></div></div>`}
+        function hCard(m){const p=m.posterUrl||'https://via.placeholder.com/200x130/1a1a2e/e50914';return`<div class="h-card" onclick="location.href='/watch/${m.id}'"><img src="${p}" loading="lazy" onerror="this.src='https://via.placeholder.com/200x130/1a1a2e/e50914'"><div class="h-info"><div class="h-title">${m.title}</div><div class="h-meta" style="font-size:10px;color:var(--text2)">${m.genre} • ${m.year}</div></div></div>`}
+        
+        function buildSlider(movies){
+            const slider=document.getElementById('slider'),dots=document.getElementById('dots');
+            slider.querySelectorAll('.slide,.slider-nav').forEach(e=>e.remove());
+            if(!movies.length)return;
+            movies.slice(0,6).forEach((m,i)=>{
+                const div=document.createElement('div');div.className=`slide ${i===0?'active':''}`;
+                div.style.backgroundImage=m.posterUrl?`url(${m.posterUrl})`:'linear-gradient(135deg,#1a0a2e,#0a0a1a)';
+                div.innerHTML=`<div class="slide-info"><h2>${m.title}</h2><div class="meta">⭐ ${m.imdbRating||'N/A'} | 📅 ${m.year} | 🎭 ${m.genre}</div><p style="color:var(--text2);font-size:13px">${(m.description||'').slice(0,120)}...</p><div class="btns"><button class="btn btn-red" onclick="location.href='/watch/${m.id}'"><i class="fas fa-play"></i> Watch</button><button class="btn btn-outline" onclick="location.href='/watch/${m.id}'"><i class="fas fa-info-circle"></i> Details</button></div></div>`;
+                slider.appendChild(div);
+            });
+            slider.innerHTML+=`<button class="slider-nav prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button><button class="slider-nav next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>`;
+            dots.innerHTML=movies.slice(0,6).map((_,i)=>`<span class="dot ${i===0?'active':''}" onclick="goToSlide(${i})"></span>`).join('');
+            clearInterval(slideInterval);slideInterval=setInterval(()=>changeSlide(1),5000);
+        }
+        
+        function changeSlide(dir){
+            const slides=document.querySelectorAll('.slide'),dots=document.querySelectorAll('.dot');
+            if(!slides.length)return;
+            slides[currentSlide].classList.remove('active');dots[currentSlide].classList.remove('active');
+            currentSlide=(currentSlide+dir+slides.length)%slides.length;
+            slides[currentSlide].classList.add('active');dots[currentSlide].classList.add('active');
+        }
+        function goToSlide(i){const slides=document.querySelectorAll('.slide'),dots=document.querySelectorAll('.dot');slides[currentSlide].classList.remove('active');dots[currentSlide].classList.remove('active');currentSlide=i;slides[i].classList.add('active');dots[i].classList.add('active');clearInterval(slideInterval);slideInterval=setInterval(()=>changeSlide(1),5000)}
         
         async function loadAll(){
-            if(!token)return;
-            const r=await fetch(API+'/api/movies'),movies=await r.json();
-            document.getElementById('statsRow').innerHTML=`<div class="stat-card"><i class="fas fa-film"></i><div><div class="val">${movies.length}</div><div class="lbl">Total Movies</div></div></div><div class="stat-card"><i class="fas fa-eye"></i><div><div class="val">${movies.reduce((s,m)=>s+(m.views||0),0)}</div><div class="lbl">Total Views</div></div></div><div class="stat-card"><i class="fas fa-fire"></i><div><div class="val">${movies.length}</div><div class="lbl">Available</div></div></div>`;
-            const half=Math.ceil(movies.length/2);
-            document.getElementById('trendingGrid').innerHTML=movies.slice(0,half).map(card).join('')||'<div class="empty-state">No movies</div>';
-            document.getElementById('popularRow').innerHTML=movies.slice(half).map(hCard).join('')||'<div class="empty-state">No movies</div>';
-            document.getElementById('recentGrid').innerHTML=movies.slice(-8).map(card).join('')||'<div class="empty-state">No movies</div>';
-            if(movies.length>0){const f=movies[0];document.getElementById('featuredBanner').style.backgroundImage=f.posterUrl?`url(${f.posterUrl})`:'linear-gradient(135deg,#1a0a2e,#0a0a1a)';document.getElementById('featuredBanner').querySelector('.featured-info').innerHTML=`<h2>${f.title}</h2><div class="meta">⭐ ${f.imdbRating||'N/A'} | 📅 ${f.year} | 🎭 ${f.genre}</div><p style="color:var(--text2)">${(f.description||'').slice(0,120)}...</p><button class="btn-red" onclick="location.href='/watch/${f.id}'"><i class="fas fa-play"></i> Watch Now</button>`}
+            const r=await fetch(API+'/api/movies');allMovies=await r.json();
+            document.getElementById('trendingGrid').innerHTML=allMovies.map(card).join('')||'<p style="color:var(--text2)">No movies</p>';
+            document.getElementById('popularRow').innerHTML=allMovies.slice(0,8).map(hCard).join('')||'<p style="color:var(--text2)">No movies</p>';
+            buildSlider(allMovies);
         }
-        async function filterMovies(genre,el){document.querySelectorAll('.sidebar .menu li a').forEach(a=>a.classList.remove('active'));if(el)el.classList.add('active');const r=await fetch(API+'/api/movies'+(genre!=='all'?'?genre='+genre:''));const m=await r.json();document.getElementById('trendingGrid').innerHTML=m.map(card).join('')||'<div class="empty-state">No movies</div>';document.getElementById('popularRow').innerHTML='';document.getElementById('recentGrid').innerHTML=''}
-        async function searchMovies(){const q=document.getElementById('s').value.trim();if(!q){loadAll();return}const r=await fetch(API+'/api/search?q='+q);const m=await r.json();document.getElementById('trendingGrid').innerHTML=m.map(card).join('')||'<div class="empty-state">No results</div>'}
-        let st;async function liveSearch(){clearTimeout(st);const q=document.getElementById('s').value.trim();if(!q)return;st=setTimeout(async()=>{const r=await fetch(API+'/api/search?q='+q);const m=await r.json();},300)}
+        async function filterMovies(genre,el){document.querySelectorAll('.sidebar .menu li a').forEach(a=>a.classList.remove('active'));if(el)el.classList.add('active');const r=await fetch(API+'/api/movies'+(genre!=='all'?'?genre='+genre:''));const m=await r.json();document.getElementById('trendingGrid').innerHTML=m.map(card).join('')||'<p style="color:var(--text2)">No movies</p>'}
+        async function searchMovies(){const q=document.getElementById('s').value.trim();if(!q){loadAll();return}const r=await fetch(API+'/api/search?q='+q);const m=await r.json();document.getElementById('trendingGrid').innerHTML=m.map(card).join('')||'<p style="color:var(--text2)">No results</p>'}
         loadAll();
     </script>
 </body>
