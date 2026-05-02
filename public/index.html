@@ -15,7 +15,7 @@
         .sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-w);background:var(--bg2);border-right:1px solid var(--border);padding:20px 0;z-index:999;overflow-y:auto;transition:0.3s}
         .sidebar .logo{font-size:1.8rem;font-weight:900;color:var(--red);text-align:center;margin-bottom:25px;letter-spacing:-1px;padding:0 15px}
         .sidebar .menu{list-style:none}
-        .sidebar .menu li a{display:flex;align-items:center;gap:12px;padding:12px 20px;color:var(--text2);text-decoration:none;font-size:14px;transition:0.3s;font-weight:500}
+        .sidebar .menu li a{display:flex;align-items:center;gap:12px;padding:12px 20px;color:var(--text2);text-decoration:none;font-size:14px;transition:0.3s;font-weight:500;cursor:pointer}
         .sidebar .menu li a:hover,.sidebar .menu li a.active{color:var(--text);background:rgba(229,9,20,0.15);border-right:3px solid var(--red)}
         .sidebar .menu li a i{width:20px;text-align:center;font-size:16px}
         
@@ -31,18 +31,18 @@
         .btn-sm{padding:8px 18px;border-radius:20px;font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;border:none;transition:0.3s}
         .btn-red{background:var(--red);color:#fff}.btn-outline{background:transparent;color:#fff;border:1px solid #555}
         
-        /* HERO SLIDER */
-        .hero-slider{position:relative;height:450px;overflow:hidden;margin-bottom:30px}
+        /* HERO */
+        .hero-slider{position:relative;height:400px;overflow:hidden;margin-bottom:25px;background:var(--bg2)}
         .hero-slide{position:absolute;top:0;left:0;right:0;bottom:0;background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:40px;transition:0.8s;opacity:0}
         .hero-slide.active{opacity:1}
         .hero-slide::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(0deg,#0a0a0f 5%,transparent 70%)}
         .hero-info{position:relative;z-index:2;max-width:500px}
-        .hero-info h2{font-size:2.5rem;font-weight:900;margin-bottom:8px}
+        .hero-info h2{font-size:2.2rem;font-weight:900;margin-bottom:8px}
         .hero-info .meta{color:var(--gold);font-size:13px;margin-bottom:8px}
         .hero-info p{color:var(--text2);font-size:14px;margin-bottom:15px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
         .hero-btns{display:flex;gap:10px}
-        .hero-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:5;background:rgba(0,0,0,0.6);border:none;color:#fff;font-size:24px;padding:12px 18px;cursor:pointer;border-radius:50%}
-        .hero-nav.prev{left:20px}.hero-nav.next{right:20px}
+        .hero-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:5;background:rgba(0,0,0,0.6);border:none;color:#fff;font-size:22px;padding:10px 16px;cursor:pointer;border-radius:50%}
+        .hero-nav.prev{left:15px}.hero-nav.next{right:15px}
         
         /* SECTIONS */
         .section{padding:0 25px 30px}
@@ -61,23 +61,22 @@
         .play-overlay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:45px;color:#fff;opacity:0;transition:0.3s}
         .movie-card:hover .play-overlay{opacity:1}
         
+        .empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text2)}
+        .empty-state i{font-size:60px;color:var(--red);margin-bottom:15px;display:block}
+        .empty-state h3{font-size:1.3rem;margin-bottom:8px;color:var(--text)}
+        .empty-state p{font-size:14px}
         .no-movies{grid-column:1/-1;text-align:center;padding:60px;color:var(--text2)}
-        
-        /* GENRE TAGS */
-        .genre-tags{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
-        .genre-tag{padding:8px 18px;border-radius:25px;background:var(--bg3);border:1px solid var(--border);cursor:pointer;font-size:12px;font-weight:600;transition:0.3s;color:var(--text2)}
-        .genre-tag:hover,.genre-tag.active{background:var(--red);color:#fff;border-color:var(--red)}
         
         footer{text-align:center;padding:20px;color:#555;font-size:12px;border-top:1px solid var(--border);margin-top:30px}
         
         @media(max-width:768px){
             .sidebar{left:-100%}.sidebar.open{left:0}
             .main{margin-left:0}
-            .hero-slider{height:300px}
-            .hero-info h2{font-size:1.5rem}
+            .hero-slider{height:280px}
+            .hero-info h2{font-size:1.4rem}
             .movie-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
             .movie-poster{height:180px}
-            .search-box{width:200px}
+            .search-box{width:180px}
         }
     </style>
 </head>
@@ -87,14 +86,14 @@
     <aside class="sidebar" id="sidebar">
         <div class="logo">ONflix</div>
         <ul class="menu">
-            <li><a href="#" class="active" onclick="filterMovies('all')"><i class="fas fa-home"></i> Home</a></li>
-            <li><a href="#" onclick="filterMovies('Action')"><i class="fas fa-film"></i> Action</a></li>
-            <li><a href="#" onclick="filterMovies('Comedy')"><i class="fas fa-laugh"></i> Comedy</a></li>
-            <li><a href="#" onclick="filterMovies('Drama')"><i class="fas fa-theater-masks"></i> Drama</a></li>
-            <li><a href="#" onclick="filterMovies('Horror')"><i class="fas fa-ghost"></i> Horror</a></li>
-            <li><a href="#" onclick="filterMovies('Sci-Fi')"><i class="fas fa-rocket"></i> Sci-Fi</a></li>
-            <li><a href="#" onclick="filterMovies('Pakistani Drama')"><i class="fas fa-tv"></i> Pakistani Drama</a></li>
-            <li><a href="#" onclick="filterMovies('Turkish Drama')"><i class="fas fa-globe"></i> Turkish Drama</a></li>
+            <li><a class="active" onclick="filterMovies('all', this)"><i class="fas fa-home"></i> Home</a></li>
+            <li><a onclick="filterMovies('Action', this)"><i class="fas fa-film"></i> Action</a></li>
+            <li><a onclick="filterMovies('Comedy', this)"><i class="fas fa-laugh"></i> Comedy</a></li>
+            <li><a onclick="filterMovies('Drama', this)"><i class="fas fa-theater-masks"></i> Drama</a></li>
+            <li><a onclick="filterMovies('Horror', this)"><i class="fas fa-ghost"></i> Horror</a></li>
+            <li><a onclick="filterMovies('Sci-Fi', this)"><i class="fas fa-rocket"></i> Sci-Fi</a></li>
+            <li><a onclick="filterMovies('Pakistani Drama', this)"><i class="fas fa-tv"></i> Pakistani Drama</a></li>
+            <li><a onclick="filterMovies('Turkish Drama', this)"><i class="fas fa-globe"></i> Turkish Drama</a></li>
         </ul>
     </aside>
 
@@ -115,19 +114,24 @@
         </div>
 
         <!-- HERO SLIDER -->
-        <div class="hero-slider" id="heroSlider"></div>
-
-        <!-- GENRE TAGS -->
-        <div class="section">
-            <div class="genre-tags" id="genreTags">
-                <span class="genre-tag active" onclick="filterMovies('all')">All</span>
+        <div class="hero-slider" id="heroSlider">
+            <div class="hero-slide active" style="background:linear-gradient(135deg,#1a0a0a,#0a0a1a);display:flex;align-items:center;justify-content:center;">
+                <div class="hero-info" style="text-align:center;">
+                    <h2>Welcome to ONflix</h2>
+                    <p>Watch unlimited movies & dramas anytime, anywhere. Free forever!</p>
+                    <div class="hero-btns" style="justify-content:center;">
+                        <button class="btn-sm btn-red" onclick="document.getElementById('movieGrid').scrollIntoView({behavior:'smooth'})"><i class="fas fa-play"></i> Browse Movies</button>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- MOVIES -->
         <div class="section">
             <h2 class="section-title"><i class="fas fa-fire"></i> <span id="sectionLabel">All Movies</span></h2>
-            <div class="movie-grid" id="movieGrid"></div>
+            <div class="movie-grid" id="movieGrid">
+                <div class="no-movies"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>
+            </div>
         </div>
 
         <footer>© 2025 ONflix - Pakistan | Made with ❤️</footer>
@@ -140,8 +144,11 @@
         const user = JSON.parse(localStorage.getItem('onflix_user') || '{}');
         let currentFilter = 'all';
 
-        if (!token) { document.getElementById('loginBtn').style.display = 'inline-block'; }
-        else {
+        // Auth UI
+        if (!token) {
+            document.getElementById('loginBtn').style.display = 'inline-block';
+            document.getElementById('logoutBtn').style.display = 'none';
+        } else {
             document.getElementById('loginBtn').style.display = 'none';
             document.getElementById('logoutBtn').style.display = 'inline-block';
             document.getElementById('userName').textContent = '👤 ' + (user.name || 'User');
@@ -149,8 +156,13 @@
         }
 
         function logout() { localStorage.clear(); window.location.href = '/login'; }
+
+        // Fetch with token
         const origFetch = fetch;
-        fetch = function(url, options = {}) { if (token) { options.headers = options.headers || {}; options.headers['Authorization'] = 'Bearer ' + token; } return origFetch(url, options); };
+        fetch = function(url, options = {}) {
+            if (token) { options.headers = options.headers || {}; options.headers['Authorization'] = 'Bearer ' + token; }
+            return origFetch(url, options);
+        };
 
         function movieCard(m) {
             const p = m.posterUrl || 'https://via.placeholder.com/180x260/1a1a2e/e50914?text=ONflix';
@@ -158,53 +170,98 @@
             return `<div class="movie-card" onclick="${link}" style="position:relative">
                 <img class="movie-poster" src="${p}" alt="${m.title}" loading="lazy" onerror="this.src='https://via.placeholder.com/180x260/1a1a2e/e50914?text=ONflix'">
                 <div class="play-overlay"><i class="fas fa-play-circle"></i></div>
-                <div class="movie-info"><div class="movie-title">${m.title}</div><div class="movie-meta">📅 ${m.year}</div><span class="movie-genre">${m.genre}</span></div></div>`;
+                <div class="movie-info"><div class="movie-title">${m.title}</div><div class="movie-meta">📅 ${m.year} | 👁 ${m.views||0}</div><span class="movie-genre">${m.genre}</span></div></div>`;
         }
 
         async function loadMovies(filter = 'all') {
-            const g = document.getElementById('movieGrid');
-            if (!token) { g.innerHTML = '<div class="no-movies"><i class="fas fa-lock"></i><h3>Please <a href="/login" style="color:var(--red)">Sign In</a></h3></div>'; return; }
+            const grid = document.getElementById('movieGrid');
+            const label = document.getElementById('sectionLabel');
+            
+            if (!token) {
+                grid.innerHTML = '<div class="empty-state"><i class="fas fa-lock"></i><h3>Please Sign In</h3><p><a href="/login" style="color:var(--red)">Login</a> to watch movies</p></div>';
+                return;
+            }
+
             try {
-                const r = await fetch(`${API}/api/movies`);
-                allMovies = await r.json();
-                let filtered = filter === 'all' ? allMovies : allMovies.filter(m => m.genre === filter);
-                document.getElementById('sectionLabel').textContent = filter === 'all' ? 'All Movies' : filter;
-                if (!filtered.length) { g.innerHTML = '<div class="no-movies"><i class="fas fa-film"></i><h3>No Movies Found</h3></div>'; return; }
-                g.innerHTML = filtered.map(movieCard).join('');
-                setupHero(filtered.slice(0, 5));
-            } catch(e) { g.innerHTML = '<div class="no-movies"><h3>Please login</h3></div>'; }
+                const url = filter === 'all' ? `${API}/api/movies` : `${API}/api/movies?genre=${encodeURIComponent(filter)}`;
+                const r = await fetch(url);
+                const movies = await r.json();
+                
+                label.textContent = filter === 'all' ? 'All Movies' : filter;
+                
+                if (!movies.length) {
+                    grid.innerHTML = `<div class="empty-state">
+                        <i class="fas fa-film"></i>
+                        <h3>No Movies Found</h3>
+                        <p>${filter === 'all' ? 'Be the first to upload a movie!' : `No ${filter} movies yet. Check back later!`}</p>
+                    </div>`;
+                    return;
+                }
+                
+                grid.innerHTML = movies.map(movieCard).join('');
+                
+                // Update hero with first movie
+                if (movies.length > 0) {
+                    updateHero(movies.slice(0, 5));
+                }
+            } catch(e) {
+                grid.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Error Loading</h3><p>Please try again</p></div>';
+            }
         }
 
-        function filterMovies(genre) {
+        function filterMovies(genre, element) {
             currentFilter = genre;
-            document.querySelectorAll('.genre-tag').forEach(t => t.classList.remove('active'));
-            event?.target?.classList.add('active');
+            // Update sidebar active
+            document.querySelectorAll('.sidebar .menu li a').forEach(a => a.classList.remove('active'));
+            if (element) element.classList.add('active');
             loadMovies(genre);
         }
 
-        let heroIndex = 0;
-        function setupHero(movies) {
+        function updateHero(movies) {
             const slider = document.getElementById('heroSlider');
             if (!movies.length) return;
             slider.innerHTML = movies.map((m, i) => {
-                const bg = m.posterUrl || '';
-                return `<div class="hero-slide ${i === 0 ? 'active' : ''}" style="background-image:url(${bg})">
-                    <div class="hero-info"><h2>${m.title}</h2><div class="meta">⭐ ${m.rating || 'N/A'} | 📅 ${m.year} | 🎭 ${m.genre}</div><p>${m.description || ''}</p>
-                    <div class="hero-btns"><button class="btn-sm btn-red" onclick="location.href='/watch/${m.id}'"><i class="fas fa-play"></i> Watch</button></div></div></div>`;
+                const bg = m.posterUrl ? `url(${m.posterUrl})` : 'linear-gradient(135deg,#1a0a0a,#0a0a1a)';
+                return `<div class="hero-slide ${i===0?'active':''}" style="background-image:${bg}">
+                    <div class="hero-info"><h2>${m.title}</h2><div class="meta">⭐ ${m.rating||'N/A'} | 📅 ${m.year} | 🎭 ${m.genre}</div><p>${m.description||''}</p>
+                    <div class="hero-btns"><button class="btn-sm btn-red" onclick="location.href='/watch/${m.id}'"><i class="fas fa-play"></i> Watch Now</button></div></div></div>`;
             }).join('');
+            
+            // Add navigation
+            slider.innerHTML += `<button class="hero-nav prev" onclick="changeSlide(-1)"><i class="fas fa-chevron-left"></i></button>
+                <button class="hero-nav next" onclick="changeSlide(1)"><i class="fas fa-chevron-right"></i></button>`;
+        }
+
+        let currentSlide = 0;
+        function changeSlide(dir) {
+            const slides = document.querySelectorAll('.hero-slide');
+            if (!slides.length) return;
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + dir + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
         }
 
         async function searchMovies() {
             const q = document.getElementById('s').value.trim();
+            const grid = document.getElementById('movieGrid');
+            const label = document.getElementById('sectionLabel');
+            
             if (!q) { loadMovies(currentFilter); return; }
-            const g = document.getElementById('movieGrid');
+            
             try {
                 const r = await fetch(`${API}/api/search?q=${encodeURIComponent(q)}`);
-                const m = await r.json();
-                g.innerHTML = m.length ? m.map(movieCard).join('') : '<div class="no-movies"><i class="fas fa-search"></i><h3>No results</h3></div>';
+                const movies = await r.json();
+                label.textContent = `Search: "${q}"`;
+                
+                if (!movies.length) {
+                    grid.innerHTML = `<div class="empty-state"><i class="fas fa-search"></i><h3>No Results</h3><p>No movies found for "${q}"</p></div>`;
+                } else {
+                    grid.innerHTML = movies.map(movieCard).join('');
+                }
             } catch(e) {}
         }
 
+        // Init
         loadMovies();
     </script>
 </body>
