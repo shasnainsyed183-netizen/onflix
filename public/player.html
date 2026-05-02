@@ -9,44 +9,94 @@
         :root{--bg:#000;--bg2:#111;--bg3:#1a1a1a;--red:#e50914;--gold:#f5c518;--text:#fff;--text2:#b3b3b3;--border:#333}
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-        .top-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:15px 25px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,rgba(0,0,0,0.95),transparent)}
-        .back-btn{color:#fff;text-decoration:none;font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px}
+        
+        /* TOP NAV */
+        .top-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:15px 25px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(180deg,rgba(0,0,0,0.95),transparent);transition:0.3s}
+        .back-btn{color:#fff;text-decoration:none;font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px;transition:0.3s}
         .back-btn:hover{color:var(--red)}
-        .top-logo{font-size:1.6rem;font-weight:900;color:var(--red);text-decoration:none}
+        .back-btn i{font-size:20px}
+        .top-logo{font-size:1.6rem;font-weight:900;color:var(--red);text-decoration:none;letter-spacing:-1px}
+        
+        /* VIDEO */
         .video-wrapper{width:100%;background:#000;display:flex;align-items:center;justify-content:center;min-height:55vh;max-height:80vh}
+        video{width:100%;max-height:80vh;background:#000;outline:none}
         iframe{width:100%;height:75vh;border:none;background:#000}
-        video{width:100%;max-height:80vh;background:#000}
+        
+        /* LOADING */
         .loading-screen{display:flex;align-items:center;justify-content:center;height:60vh;flex-direction:column;gap:15px}
         .spinner{width:50px;height:50px;border:4px solid #333;border-top:4px solid var(--red);border-radius:50%;animation:spin 1s linear infinite}
         @keyframes spin{to{transform:rotate(360deg)}}
-        .movie-details{max-width:1000px;margin:0 auto;padding:25px}
-        .movie-title{font-size:2.2rem;font-weight:800;margin-bottom:12px}
+        
+        /* DETAILS */
+        .movie-details{max-width:1000px;margin:0 auto;padding:30px 25px}
+        .movie-title{font-size:2.2rem;font-weight:800;margin-bottom:12px;line-height:1.2}
         .movie-meta-row{display:flex;gap:18px;flex-wrap:wrap;margin-bottom:18px;align-items:center}
-        .genre-badge{background:var(--red);color:#fff;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700}
+        .meta-item{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--text2)}
+        .meta-item i{color:var(--red)}
+        .genre-badge{background:var(--red);color:#fff;padding:5px 14px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase}
         .rating-badge{background:var(--gold);color:#000;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700}
+        .views-badge{color:var(--text2);font-size:13px}
+        
+        /* BUTTONS */
         .action-btns{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap}
-        .btn{padding:11px 22px;border-radius:25px;font-weight:700;font-size:13px;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:7px;text-decoration:none}
-        .btn-play{background:var(--red);color:#fff}.btn-outline{background:rgba(255,255,255,0.08);color:#fff;border:1px solid #555}.btn-share{background:#1da1f2;color:#fff}
+        .btn{padding:11px 22px;border-radius:25px;font-weight:700;font-size:13px;cursor:pointer;border:none;display:inline-flex;align-items:center;gap:7px;transition:0.3s;text-decoration:none}
+        .btn-play{background:var(--red);color:#fff}
+        .btn-play:hover{background:#ff0f1f;transform:scale(1.04);box-shadow:0 10px 30px rgba(229,9,20,0.4)}
+        .btn-outline{background:rgba(255,255,255,0.08);color:#fff;border:1px solid #555}
+        .btn-outline:hover{background:rgba(255,255,255,0.2)}
+        .btn-share{background:#1da1f2;color:#fff}
+        .btn-share:hover{background:#0d8bd9}
+        
         .movie-description{color:var(--text2);line-height:1.8;font-size:14px;margin-bottom:20px;max-width:700px}
-        .movie-extra{display:flex;flex-wrap:wrap;gap:25px;font-size:13px;color:var(--text2)}
+        .movie-extra{display:flex;flex-wrap:wrap;gap:25px}
+        .extra-item{font-size:13px;color:var(--text2)}
+        .extra-item strong{color:var(--text);display:block;margin-bottom:3px;font-size:11px;text-transform:uppercase;letter-spacing:1px}
+        
+        /* RELATED */
+        .related-section{max-width:1000px;margin:0 auto;padding:0 25px 30px}
+        .related-title{font-size:1.3rem;font-weight:700;margin-bottom:15px}
+        .related-grid{display:flex;gap:12px;overflow-x:auto;padding-bottom:15px;scrollbar-width:none}
+        .related-grid::-webkit-scrollbar{display:none}
+        .related-card{min-width:150px;max-width:150px;border-radius:8px;overflow:hidden;cursor:pointer;transition:0.3s;flex-shrink:0;background:var(--bg2)}
+        .related-card:hover{transform:scale(1.05)}
+        .related-card img{width:100%;height:200px;object-fit:cover}
+        .related-card .r-title{font-size:11px;font-weight:600;padding:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
+        
         .error-screen{text-align:center;padding:100px 20px}
-        @media(max-width:768px){.movie-title{font-size:1.5rem}.movie-details{padding:15px}iframe,video{height:50vh}}
+        .error-screen i{font-size:60px;color:var(--red);margin-bottom:15px}
+        
+        @media(max-width:768px){
+            .movie-title{font-size:1.5rem}
+            .movie-details{padding:15px}
+            iframe,video{height:50vh}
+            .related-card{min-width:120px;max-width:120px}
+            .related-card img{height:160px}
+        }
     </style>
 </head>
 <body>
-    <div id="loadingScreen" class="loading-screen"><div class="spinner"></div><p>Loading movie...</p></div>
+
+    <div id="loadingScreen" class="loading-screen">
+        <div class="spinner"></div>
+        <p style="color:#aaa;">Loading movie...</p>
+    </div>
+
     <div id="mainContent" style="display:none;"></div>
+
     <script>
         const API = location.origin;
         const movieId = location.pathname.split('/watch/')[1];
         const token = localStorage.getItem('onflix_token');
-        if (!token) { document.getElementById('loadingScreen').innerHTML = '<div class="error-screen"><i class="fas fa-lock"></i><h2>Please Login First</h2><a href="/login" class="btn btn-play">Sign In</a></div>'; }
+        
+        if (!token) {
+            document.getElementById('loadingScreen').innerHTML = '<div class="error-screen"><i class="fas fa-lock"></i><h2>Please Login First</h2><a href="/login" class="btn btn-play" style="margin-top:15px;">Sign In</a></div>';
+        }
 
         function getEmbedUrl(rawUrl) {
             if (!rawUrl) return null;
             let url = rawUrl.trim();
             
-            // YouTube (watch?v=, youtu.be, shorts, embed)
+            // YouTube
             if (url.includes('youtube.com/watch?v=') || url.includes('youtu.be/') || url.includes('youtube.com/shorts/') || url.includes('youtube.com/embed/')) {
                 let videoId = null;
                 if (url.includes('watch?v=')) videoId = url.split('watch?v=')[1]?.split('&')[0];
@@ -55,92 +105,141 @@
                 else if (url.includes('/embed/')) videoId = url.split('/embed/')[1]?.split('?')[0];
                 return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0` : null;
             }
-            
             // Vimeo
             if (url.includes('vimeo.com')) {
                 let videoId = url.split('vimeo.com/')[1]?.split('?')[0];
                 return videoId ? `https://player.vimeo.com/video/${videoId}?autoplay=1` : null;
             }
-            
             // Dailymotion
             if (url.includes('dailymotion.com/video/') || url.includes('dai.ly/')) {
                 let videoId = url.includes('dai.ly/') ? url.split('dai.ly/')[1]?.split('?')[0] : url.split('dailymotion.com/video/')[1]?.split('?')[0];
                 return videoId ? `https://www.dailymotion.com/embed/video/${videoId}?autoplay=1` : null;
             }
-            
             // Facebook
             if (url.includes('facebook.com/watch') || url.includes('fb.watch/')) {
                 return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false&autoplay=1`;
             }
-            
             // Google Drive
             if (url.includes('drive.google.com/file/d/')) {
                 let fileId = url.split('/file/d/')[1]?.split('/')[0];
                 return fileId ? `https://drive.google.com/file/d/${fileId}/preview?autoplay=1` : null;
             }
-            
             // OK.ru
             if (url.includes('ok.ru/video/')) {
                 let videoId = url.split('ok.ru/video/')[1]?.split('?')[0];
                 return videoId ? `https://ok.ru/videoembed/${videoId}?autoplay=1` : null;
             }
-            
-            // Direct MP4 link
+            // Direct video
             if (url.endsWith('.mp4') || url.endsWith('.webm') || url.endsWith('.mkv')) {
-                return null; // Will use video tag
+                return null;
             }
-            
-            // Fallback: try iframe
             return url;
         }
 
         async function loadPlayer() {
             try {
-                const res = await fetch(`${API}/api/movies/${movieId}`, { headers: token ? { 'Authorization': 'Bearer ' + token } : {} });
+                const res = await fetch(`${API}/api/movies/${movieId}`, {
+                    headers: token ? { 'Authorization': 'Bearer ' + token } : {}
+                });
                 const m = await res.json();
-                if (m.error) { document.getElementById('loadingScreen').innerHTML = `<div class="error-screen"><i class="fas fa-exclamation-triangle"></i><h2>Movie Not Found</h2><a href="/" class="btn btn-play">Back</a></div>`; return; }
+
+                if (m.error) {
+                    document.getElementById('loadingScreen').innerHTML = `<div class="error-screen"><i class="fas fa-exclamation-triangle"></i><h2>Movie Not Found</h2><p style="color:#aaa;">${m.error}</p><a href="/" class="btn btn-play" style="margin-top:15px;">Back to Home</a></div>`;
+                    return;
+                }
+
                 document.title = `${m.title} - ONflix`;
 
                 let videoHTML = '';
                 if (m.youtubeLink) {
                     const embedUrl = getEmbedUrl(m.youtubeLink);
                     if (embedUrl) {
-                        videoHTML = `<iframe src="${embedUrl}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups allow-forms"></iframe>`;
+                        videoHTML = `<iframe src="${embedUrl}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
                     } else {
                         videoHTML = `<video controls autoplay><source src="${m.youtubeLink}" type="video/mp4"></video>`;
                     }
                 } else if (m.videoUrl) {
-                    videoHTML = `<video controls autoplay><source src="${m.videoUrl}" type="video/mp4"></video>`;
+                    videoHTML = `<video controls autoplay crossorigin="anonymous"><source src="${m.videoUrl}" type="video/mp4">Your browser doesn't support video playback.</video>`;
                 } else {
-                    videoHTML = `<div class="loading-screen"><i class="fas fa-video-slash"></i><p>No video source</p></div>`;
+                    videoHTML = `<div class="loading-screen"><i class="fas fa-video-slash" style="font-size:50px;color:#555;"></i><p style="color:#aaa;">No video source available</p></div>`;
                 }
 
                 document.getElementById('mainContent').innerHTML = `
-                    <div class="top-nav"><a href="/" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a><a href="/" class="top-logo">ONflix</a></div>
+                    <div class="top-nav">
+                        <a href="/" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+                        <a href="/" class="top-logo">ONflix</a>
+                    </div>
                     <div class="video-wrapper">${videoHTML}</div>
                     <div class="movie-details">
                         <h1 class="movie-title">${m.title}</h1>
                         <div class="movie-meta-row">
-                            <span class="genre-badge">${m.genre}</span><span>📅 ${m.year}</span><span>⏱ ${m.duration}</span><span class="rating-badge">⭐ ${m.rating||'N/A'}</span><span>👁 ${m.views||0} views</span>
+                            <span class="genre-badge">${m.genre}</span>
+                            <span class="meta-item"><i class="fas fa-calendar"></i> ${m.year}</span>
+                            <span class="meta-item"><i class="fas fa-clock"></i> ${m.duration}</span>
+                            <span class="rating-badge"><i class="fas fa-star"></i> ${m.rating || 'N/A'}</span>
+                            <span class="views-badge"><i class="fas fa-eye"></i> ${m.views || 0} views</span>
                         </div>
                         <div class="action-btns">
-                            <button class="btn btn-play" onclick="location.reload()"><i class="fas fa-play"></i> Play</button>
+                            <button class="btn btn-play" onclick="window.location.reload()"><i class="fas fa-play"></i> Play</button>
                             <a href="/" class="btn btn-outline"><i class="fas fa-home"></i> Home</a>
                             <button class="btn btn-share" onclick="shareMovie()"><i class="fas fa-share-alt"></i> Share</button>
                         </div>
-                        <p class="movie-description">${m.description||''}</p>
-                        <div class="movie-extra">${m.director?`<span><strong>Director:</strong> ${m.director}</span>`:''} ${m.cast?`<span><strong>Cast:</strong> ${m.cast}</span>`:''}</div>
-                    </div>`;
-            } catch(e) { document.getElementById('loadingScreen').innerHTML = `<div class="error-screen"><i class="fas fa-exclamation-circle"></i><h2>Error</h2><a href="/" class="btn btn-play">Back</a></div>`; }
+                        <p class="movie-description">${m.description || 'No description available.'}</p>
+                        <div class="movie-extra">
+                            ${m.director ? `<div class="extra-item"><strong>Director</strong>${m.director}</div>` : ''}
+                            ${m.cast ? `<div class="extra-item"><strong>Cast</strong>${m.cast}</div>` : ''}
+                            ${m.filename ? `<div class="extra-item"><strong>File</strong>${m.filename}</div>` : ''}
+                            <div class="extra-item"><strong>Uploaded</strong>${new Date(m.uploadDate).toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'})}</div>
+                        </div>
+                    </div>
+                `;
+
+                // Load related movies
+                loadRelated(m.genre, m.id);
+
+            } catch(e) {
+                document.getElementById('loadingScreen').innerHTML = `<div class="error-screen"><i class="fas fa-exclamation-circle"></i><h2>Error Loading Movie</h2><p style="color:#aaa;">Please try again later.</p><a href="/" class="btn btn-play" style="margin-top:15px;">Back to Home</a></div>`;
+            }
+
             document.getElementById('loadingScreen').style.display = 'none';
             document.getElementById('mainContent').style.display = 'block';
         }
 
+        async function loadRelated(genre, currentId) {
+            try {
+                const res = await fetch(`${API}/api/movies`, {
+                    headers: token ? { 'Authorization': 'Bearer ' + token } : {}
+                });
+                const movies = await res.json();
+                const related = movies.filter(m => m.genre === genre && m.id !== currentId).slice(0, 8);
+                
+                if (related.length > 0) {
+                    document.getElementById('mainContent').innerHTML += `
+                        <div class="related-section">
+                            <h3 class="related-title">🎬 More Like This</h3>
+                            <div class="related-grid">
+                                ${related.map(m => `
+                                    <div class="related-card" onclick="location.href='/watch/${m.id}'">
+                                        <img src="${m.posterUrl || 'https://via.placeholder.com/150x200/1a1a2e/e50914?text=ONflix'}" alt="${m.title}" onerror="this.src='https://via.placeholder.com/150x200/1a1a2e/e50914?text=ONflix'">
+                                        <div class="r-title">${m.title}</div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>`;
+                }
+            } catch(e) {}
+        }
+
         function shareMovie() {
             const url = window.location.href;
-            if (navigator.share) navigator.share({ title: document.title, url });
-            else { navigator.clipboard.writeText(url); alert('📋 Link copied!'); }
+            if (navigator.share) {
+                navigator.share({ title: document.title, url: url });
+            } else {
+                navigator.clipboard.writeText(url);
+                alert('📋 Link copied to clipboard!');
+            }
         }
+
         loadPlayer();
     </script>
 </body>

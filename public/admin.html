@@ -9,12 +9,9 @@
         :root{--bg:#000;--bg2:#111;--bg3:#1a1a1a;--red:#e50914;--text:#fff;--text2:#b3b3b3;--border:#333}
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Helvetica Neue',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-        
-        /* Background gradient */
         body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at top,rgba(229,9,20,0.1),transparent 60%),radial-gradient(ellipse at bottom,rgba(0,0,0,0.8),transparent);z-index:-1}
 
         .upload-container{background:var(--bg2);padding:40px;border-radius:10px;max-width:650px;width:100%;border:1px solid var(--border);box-shadow:0 30px 60px rgba(0,0,0,0.7)}
-        
         .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
         .header h1{font-size:28px;font-weight:700;color:var(--text)}
         .header h1 i{color:var(--red);margin-right:10px}
@@ -58,15 +55,11 @@
         .or-divider::before,.or-divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--border)}
         .or-divider::before{left:0}.or-divider::after{right:0}
 
-        @media(max-width:768px){
-            .form-grid{grid-template-columns:1fr}
-            .upload-container{padding:25px}
-        }
+        @media(max-width:768px){.form-grid{grid-template-columns:1fr}.upload-container{padding:25px}}
     </style>
 </head>
 <body>
     <div class="upload-container">
-        <!-- Header -->
         <div class="header">
             <h1><i class="fas fa-cloud-upload-alt"></i> Upload Movie</h1>
             <div class="nav-btns">
@@ -75,22 +68,16 @@
             </div>
         </div>
 
-        <!-- Form -->
         <form id="uploadForm" enctype="multipart/form-data">
             <div class="form-grid">
-                <!-- Title -->
                 <div class="form-group full">
                     <label>📌 Movie Title *</label>
                     <input type="text" name="title" required placeholder="Enter movie title...">
                 </div>
-
-                <!-- Description -->
                 <div class="form-group full">
                     <label>📝 Description</label>
                     <textarea name="description" placeholder="About the movie..."></textarea>
                 </div>
-
-                <!-- Genre -->
                 <div class="form-group">
                     <label>🎭 Genre</label>
                     <select name="genre">
@@ -100,53 +87,37 @@
                         <option>Hollywood</option><option>Bollywood</option><option>Other</option>
                     </select>
                 </div>
-
-                <!-- Year -->
                 <div class="form-group">
                     <label>📅 Year</label>
                     <input type="number" name="year" value="2025" placeholder="2025">
                 </div>
-
-                <!-- Duration -->
                 <div class="form-group">
                     <label>⏱️ Duration</label>
                     <input type="text" name="duration" placeholder="2h 15min">
                 </div>
-
-                <!-- Director -->
                 <div class="form-group">
                     <label>🎬 Director</label>
                     <input type="text" name="director" placeholder="Director name">
                 </div>
-
-                <!-- Cast -->
                 <div class="form-group full">
                     <label>👥 Cast</label>
                     <input type="text" name="cast" placeholder="Actor 1, Actor 2, Actor 3">
                 </div>
-
-                <!-- Movie File -->
                 <div class="form-group full">
-                    <label>🎥 Movie File (MP4/MKV) - Choti Files Ke Liye</label>
+                    <label>🎥 Movie File (MP4/MKV)</label>
                     <div class="file-upload" onclick="document.getElementById('videoFile').click()">
                         <i class="fas fa-video"></i>
                         <p id="videoLabel">Click to choose video file</p>
                         <input type="file" id="videoFile" name="video" accept="video/*" onchange="document.getElementById('videoLabel').textContent=this.files[0]?.name||'Click to choose video file'">
                     </div>
                 </div>
-
-                <!-- OR Divider -->
                 <div class="form-group full">
                     <div class="or-divider">OR</div>
                 </div>
-
-                <!-- YouTube Link -->
                 <div class="form-group full">
-                    <label>🔗 YouTube Link - Badi Files Ke Liye</label>
-                    <input type="text" name="youtubeLink" placeholder="https://youtu.be/xxxxx or https://youtube.com/watch?v=xxxxx">
+                    <label>🔗 YouTube Link</label>
+                    <input type="text" name="youtubeLink" placeholder="https://youtu.be/xxxxx">
                 </div>
-
-                <!-- Poster Image -->
                 <div class="form-group full">
                     <label>🖼️ Poster Image (Optional)</label>
                     <div class="file-upload" onclick="document.getElementById('posterFile').click()">
@@ -156,17 +127,11 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Submit -->
             <button type="submit" class="btn-submit" id="submitBtn">
                 <i class="fas fa-rocket"></i> Upload Movie Now
             </button>
         </form>
-
-        <!-- Message -->
         <div class="msg" id="msg"></div>
-
-        <!-- Back Link -->
         <div class="back-link">
             <a href="/"><i class="fas fa-arrow-left"></i> Back to ONflix</a>
         </div>
@@ -174,11 +139,13 @@
 
     <script>
         const API = location.origin;
+        const adminKey = localStorage.getItem('admin_device_key') || '';
 
         function logout() {
+            localStorage.removeItem('admin_device_key');
             localStorage.removeItem('onflix_admin_verified');
             localStorage.removeItem('admin_password');
-            alert('✅ Logged out successfully!');
+            alert('✅ Logged out! Upload features disabled.');
             window.location.href = '/';
         }
 
@@ -195,7 +162,6 @@
             const formData = new FormData(this);
             const submitBtn = document.getElementById('submitBtn');
             
-            // Check: ya to file hai ya YouTube link
             const videoFile = document.getElementById('videoFile').files[0];
             const youtubeLink = formData.get('youtubeLink')?.trim();
             
@@ -204,24 +170,23 @@
                 return;
             }
             
-            // Show uploading
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
             showMsg('⏳ Uploading... Please wait...', 'info');
             
             try {
-                const res = await fetch(`${API}/api/movies`, {
+                const res = await fetch(`${API}/api/movies?key=${adminKey}`, {
                     method: 'POST',
                     body: formData,
                     headers: {
-                        'x-device-key': 'onflix_admin_device_verified'
+                        'x-device-key': adminKey
                     }
                 });
                 
                 const data = await res.json();
                 
                 if (data.success) {
-                    showMsg('✅ Movie uploaded successfully! Redirecting to home...', 'success');
+                    showMsg('✅ Movie uploaded successfully! Redirecting...', 'success');
                     this.reset();
                     document.getElementById('videoLabel').textContent = 'Click to choose video file';
                     document.getElementById('posterLabel').textContent = 'Click to choose poster image';
