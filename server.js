@@ -23,6 +23,23 @@ if (!fs.existsSync(DB)) fs.writeFileSync(DB, '[]');
 const getMovies = () => JSON.parse(fs.readFileSync(DB));
 const saveMovies = (m) => fs.writeFileSync(DB, JSON.stringify(m, null, 2));
 
+// ==================== PASSWORD PROTECTION ====================
+const ADMIN_PASSWORD = 'Shash@123'; // 🔑 Apna password yahan change kar sakte ho
+
+function checkAuth(req, res, next) {
+    // Admin page aur POST/DELETE requests ke liye password check
+    if (req.path === '/admin' || (req.path.startsWith('/api/movies') && req.method !== 'GET')) {
+        const auth = req.headers['x-admin-password'] || req.query.password;
+        if (auth !== ADMIN_PASSWORD) {
+            return res.status(401).json({ error: 'Unauthorized! Admin password required.' });
+        }
+    }
+    next();
+}
+
+app.use(checkAuth);
+// =============================================================
+
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         if (file.fieldname === 'poster') cb(null, 'posters/');
@@ -114,5 +131,6 @@ app.get('/watch/:id', (req, res) => res.sendFile(path.join(__dirname, 'public', 
 
 app.listen(PORT, () => {
     console.log(`\n🎬 ONflix: http://localhost:${PORT}`);
-    console.log(`📤 Upload: http://localhost:${PORT}/admin\n`);
+    console.log(`📤 Upload: http://localhost:${PORT}/admin`);
+    console.log(`🔑 Admin Password: ${ADMIN_PASSWORD}\n`);
 });

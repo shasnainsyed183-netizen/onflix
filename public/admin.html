@@ -19,10 +19,29 @@
         .s{background:#2ecc71}.e{background:#e74c3c}
         .back{text-align:center;margin-top:15px}
         .back a{color:#e50914;text-decoration:none}
+        /* Password Screen */
+        .password-screen{text-align:center;padding:40px}
+        .password-screen input{padding:14px;font-size:18px;border-radius:8px;border:1px solid #e50914;background:#0d0d15;color:#fff;text-align:center;margin:15px 0;width:100%}
+        .password-screen button{background:#e50914;color:#fff;padding:14px 30px;border:none;border-radius:8px;font-size:18px;font-weight:700;cursor:pointer}
     </style>
 </head>
 <body>
-    <div class="box">
+
+    <!-- Password Screen -->
+    <div class="box" id="passwordScreen">
+        <div class="password-screen">
+            <h1>🔐 Admin Login</h1>
+            <p style="color:#aaa;margin-bottom:15px;">Enter password to access upload page</p>
+            <input type="password" id="passwordInput" placeholder="Enter password...">
+            <br>
+            <button onclick="checkPassword()">🔓 Unlock</button>
+            <p id="passwordError" style="color:#e74c3c;margin-top:10px;display:none;">❌ Wrong password!</p>
+            <div class="back" style="margin-top:20px;"><a href="/">← Back to Home</a></div>
+        </div>
+    </div>
+
+    <!-- Upload Form (Hidden by default) -->
+    <div class="box" id="uploadScreen" style="display:none;">
         <h1>🎬 Upload Movie</h1>
         <form id="f" enctype="multipart/form-data">
             <div class="fg"><label>Title *</label><input type="text" name="title" required></div>
@@ -39,18 +58,69 @@
         <div class="msg" id="msg"></div>
         <div class="back"><a href="/">← Back</a></div>
     </div>
+
     <script>
-        document.getElementById('f').addEventListener('submit',async(e)=>{
+        // 🔑 Admin Password (same as server.js)
+        const ADMIN_PASSWORD = 'Shash@123';
+
+        // Check password
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            const error = document.getElementById('passwordError');
+            
+            if (input === ADMIN_PASSWORD) {
+                // Password sahi hai - upload form dikhao
+                document.getElementById('passwordScreen').style.display = 'none';
+                document.getElementById('uploadScreen').style.display = 'block';
+                // Password store karo for API calls
+                localStorage.setItem('admin_password', input);
+            } else {
+                error.style.display = 'block';
+            }
+        }
+
+        // Enter key se bhi check karo
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        // Agar pehle se login hai to seedha form dikhao
+        if (localStorage.getItem('admin_password') === ADMIN_PASSWORD) {
+            document.getElementById('passwordScreen').style.display = 'none';
+            document.getElementById('uploadScreen').style.display = 'block';
+        }
+
+        // Upload form with password in header
+        document.getElementById('f').addEventListener('submit', async(e) => {
             e.preventDefault();
-            const fd=new FormData(e.target);
-            const msg=document.getElementById('msg');
-            msg.style.display='none';
-            try{
-                const r=await fetch('/api/movies',{method:'POST',body:fd});
-                const d=await r.json();
-                if(d.success){msg.className='msg s';msg.textContent='✅ Done!';msg.style.display='block';e.target.reset();setTimeout(()=>location.href='/',2000)}
-                else throw new Error(d.error||'Failed')
-            }catch(err){msg.className='msg e';msg.textContent='❌ '+err.message;msg.style.display='block'}
+            const fd = new FormData(e.target);
+            const msg = document.getElementById('msg');
+            msg.style.display = 'none';
+            
+            try {
+                const password = localStorage.getItem('admin_password') || ADMIN_PASSWORD;
+                const r = await fetch('/api/movies', {
+                    method: 'POST',
+                    body: fd,
+                    headers: {
+                        'x-admin-password': password
+                    }
+                });
+                const d = await r.json();
+                if (d.success) {
+                    msg.className = 'msg s';
+                    msg.textContent = '✅ Done!';
+                    msg.style.display = 'block';
+                    e.target.reset();
+                    setTimeout(() => location.href = '/', 2000);
+                } else {
+                    throw new Error(d.error || 'Failed');
+                }
+            } catch(err) {
+                msg.className = 'msg e';
+                msg.textContent = '❌ ' + err.message;
+                msg.style.display = 'block';
+            }
         });
     </script>
 </body>
